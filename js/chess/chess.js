@@ -24,7 +24,7 @@
 
       var text = face.append('svg:text')
             .text(BLACK_KING.unicode)
-            .attr('y', '.1  em')
+            .attr('y', '.1em')
             .style('font-size', 40)
             .attr('transform', 'translate(' + [0, r / 3] + ')')
             .attr('text-anchor', 'middle')
@@ -55,7 +55,7 @@
 
       var text = face.append('svg:text')
             .text(id)
-            // .attr("y", ".5em")
+             .attr("y", ".5em")
             // .attr("transform", "translate(" + [0, 10] + ")")
             .attr('text-anchor', 'middle')
             .attr('font-weight', 700)
@@ -103,5 +103,5 @@
     }
 
     function doSomething () {
-      d3.select('#id6').attr('class', 'yay')
+      d3.select('#id6').attr('class', 'yay').attr("height",2)
     }
