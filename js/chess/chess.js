@@ -7,7 +7,7 @@
           })
         })
 
-    function face_factory (classname, x, y, r) {
+    function piece_factory (classname, x, y, r) {
       var face = d3.select('#charts')
             .append('svg:g')
                 .data([ {'x': x, 'y': y} ]) // needed for dragging
@@ -99,7 +99,7 @@
 
       let x = Math.random() * w
       let y = Math.random() * h
-      face_factory('face' + i, x, y, r)
+      piece_factory('face' + i, x, y, r)
     }
 
     function doSomething () {
