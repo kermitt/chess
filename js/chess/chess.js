@@ -66,7 +66,7 @@ populate()
 
 function addPiece (pieceName, x, y) {
   console.log('pieceName: ' + pieceName + ' x ' + x + ' +    y ' + y)
-  let r = size / 2
+  let r = size / 3
   let face = d3.select('#charts')
         .append('svg:g')
         .data([{
@@ -81,7 +81,7 @@ function addPiece (pieceName, x, y) {
         .attr('fill', function (d) {
           return '#e0e0e0'
         })
-        .attr('fill-opacity', 0.8)
+        .attr('fill-opacity', 0.1)
         .attr('stroke', '#000')
         .attr('stroke-width', 4)
         .attr('r', r)
