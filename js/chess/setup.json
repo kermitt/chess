@@ -4,7 +4,7 @@
             "row": 0,
             "id": "id1",
             "color": "#ffffff",
-            "piece": "BLACK_ROOK",
+            "piece": "BLACK_ROOK_1",
             "i": 1
       },
       {
@@ -13,7 +13,7 @@
             "id": "id2",
             "color": "#00b200",
             
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 2
       },
       {
@@ -57,7 +57,7 @@
             "row": 6,
             "id": "id7",
             "color": "#ffffff",
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 7
       },
       {
@@ -65,8 +65,7 @@
             "row": 7,
             "id": "id8",
             "color": "#00b200",
-            
-            "piece": "WHITE_ROOK",
+            "piece": "",
             "i": 8
       },
       {
@@ -74,7 +73,7 @@
             "row": 0,
             "id": "id9",
             "color": "#00b200",
-            "piece": "BLACK_KNIGHT",
+            "piece": "",
             "i": 9
       },
       {
@@ -83,7 +82,7 @@
             "id": "id10",
             "color": "#ffffff",
             
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 10
       },
       {
@@ -127,7 +126,7 @@
             "row": 6,
             "id": "id15",
             "color": "#00b200",
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 15
       },
       {
@@ -135,7 +134,7 @@
             "row": 7,
             "id": "id16",
             "color": "#ffffff",
-            "piece": "WHITE_KNIGHT",
+            "piece": "",
             "i": 16
       },
       {
@@ -143,7 +142,7 @@
             "row": 0,
             "id": "id17",
             "color": "#ffffff",
-            "piece": "BLACK_BISHOP",
+            "piece": "",
             "i": 17
       },
       {
@@ -151,7 +150,7 @@
             "row": 1,
             "id": "id18",
             "color": "#00b200",
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 18
       },
       {
@@ -193,7 +192,7 @@
             "row": 6,
             "id": "id23",
             "color": "#ffffff",
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 23
       },
       {
@@ -201,7 +200,7 @@
             "row": 7,
             "id": "id24",
             "color": "#00b200",
-            "piece": "WHITE_BISHOP",
+            "piece": "",
             "i": 24
       },
       {
@@ -210,7 +209,7 @@
             "id": "id25",
             "color": "#00b200",
             
-            "piece": "BLACK_QUEEN",
+            "piece": "",
             "i": 25
       },
       {
@@ -218,7 +217,7 @@
             "row": 1,
             "id": "id26",
             "color": "#ffffff",
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 26
       },
       {
@@ -262,7 +261,7 @@
             "row": 6,
             "id": "id31",
             "color": "#00b200",
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 31
       },
       {
@@ -270,7 +269,7 @@
             "row": 7,
             "id": "id32",
             "color": "#ffffff",
-            "piece": "WHITE_QUEEN",
+            "piece": "",
             "i": 32
       },
       {
@@ -278,7 +277,7 @@
             "row": 0,
             "id": "id33",
             "color": "#ffffff",
-            "piece": "BLACK_KING",
+            "piece": "",
             "i": 33
       },
       {
@@ -286,7 +285,7 @@
             "row": 1,
             "id": "id34",
             "color": "#00b200",
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 34
       },
       {
@@ -294,7 +293,6 @@
             "row": 2,
             "id": "id35",
             "color": "#ffffff",
-            
             "piece": "",
             "i": 35
       },
@@ -303,7 +301,6 @@
             "row": 3,
             "id": "id36",
             "color": "#00b200",
-            
             "piece": "",
             "i": 36
       },
@@ -330,7 +327,7 @@
             "row": 6,
             "id": "id39",
             "color": "#ffffff",
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 39
       },
       {
@@ -338,7 +335,7 @@
             "row": 7,
             "id": "id40",
             "color": "#00b200",
-            "piece": "WHITE_KING",
+            "piece": "",
             "i": 40
       },
       {
@@ -346,7 +343,7 @@
             "row": 0,
             "id": "id41",
             "color": "#00b200",
-            "piece": "BLACK_BISHOP",
+            "piece": "",
             "i": 41
       },
       {
@@ -355,7 +352,7 @@
             "id": "id42",
             "color": "#ffffff",
             
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 42
       },
       {
@@ -390,7 +387,6 @@
             "row": 5,
             "id": "id46",
             "color": "#ffffff",
-            
             "piece": "",
             "i": 46
       },
@@ -399,7 +395,7 @@
             "row": 6,
             "id": "id47",
             "color": "#00b200",
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 47
       },
       {
@@ -407,7 +403,7 @@
             "row": 7,
             "id": "id48",
             "color": "#ffffff",
-            "piece": "WHITE_BISHOP",
+            "piece": "",
             "i": 48
       },
       {
@@ -415,7 +411,7 @@
             "row": 0,
             "id": "id49",
             "color": "#ffffff",
-            "piece": "BLACK_KNIGHT",
+            "piece": "",
             "i": 49
       },
       {
@@ -423,7 +419,7 @@
             "row": 1,
             "id": "id50",
             "color": "#00b200",
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 50
       },
       {
@@ -466,7 +462,7 @@
             "row": 6,
             "id": "id55",
             "color": "#ffffff",
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 55
       },
       {
@@ -474,7 +470,7 @@
             "row": 7,
             "id": "id56",
             "color": "#00b200",
-            "piece": "WHITE_KNIGHT",
+            "piece": "",
             "i": 56
       },
       {
@@ -482,7 +478,7 @@
             "row": 0,
             "id": "id57",
             "color": "#00b200",
-            "piece": "BLACK_ROOK",
+            "piece": "",
             "i": 57
       },
       {
@@ -490,7 +486,7 @@
             "row": 1,
             "id": "id58",
             "color": "#ffffff",
-            "piece": "BLACK_PAWN",
+            "piece": "",
             "i": 58
       },
       {
@@ -498,7 +494,6 @@
             "row": 2,
             "id": "id59",
             "color": "#00b200",
-            
             "piece": "",
             "i": 59
       },
@@ -507,7 +502,6 @@
             "row": 3,
             "id": "id60",
             "color": "#ffffff",
-            
             "piece": "",
             "i": 60
       },
@@ -534,8 +528,7 @@
             "row": 6,
             "id": "id63",
             "color": "#00b200",
-            
-            "piece": "WHITE_PAWN",
+            "piece": "",
             "i": 63
       },
       {
@@ -543,7 +536,7 @@
             "row": 7,
             "id": "id64",
             "color": "#ffffff",            
-            "piece": "WHITE_ROOK",
+            "piece": "",
             "i": 64
       }
 ]

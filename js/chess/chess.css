@@ -18,18 +18,20 @@ svg text {
 
  .cssthing {
     fill: rgb(255,255,255);
-    stroke: rgb(0,0,200);
+   stroke: rgb(0,0,200);
  }
 
-
+*/
  .yay {
-    fill: rgb(255,133,33);
-    stroke: rgb(200,0,200);
- }
+  
+/*  fill:#ADFF2F;*/
+fill:#ffe34c;
+  }
 
-
+/*
 .choice {
   stroke: #000000;
   stroke-width: 20px;
 }
 */
+

@@ -3,18 +3,41 @@
  <head>
    <title>Chess</title>
    <link rel="stylesheet" type="text/css" href="js/chess/chess.css">
-   <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?2.5.0"></script>
+   <script src='js/chess/moves.js'></script>
+   <script src='js/svg/d3.v2.js'></script>
 
  </head>
  <body>
 
-     <p><button onclick="doSomething();">dosomething</button><p>
-
-
-
+<table border='1'><tr><td>
+<svg id="chessboard" width="800" height="800"></svg>
+</td><td valign='top'>
+  <div id='active'>active</div>
+<hr>
+  <div id='logging'>logging</div>
+<hr>
+</td></tr></table>
    <script type="text/javascript" src="js/chess/pieces.js"></script>
-
    <script type="text/javascript" src="js/chess/chess.js"></script>
+    <p><button onclick="doSomething();">dosomething</button><p>
+
+
+<script>
+
+  function monitor_setup() { 
+    let table = "<table border='1'>"
+    for ( let key in pieces) { 
+      let possible_moves_div = "<div='" + key + "_move'></div>"
+      table += "<tr><td align='right'>" + key + "</td><td>&nbsp;</td><td><div='" + key + "'></div></td><td>" +  possible_moves_div + "</td></tr>"
+    }
+    table += "</table>"
+    document.getElementById("logging").innerHTML = table     
+
+
+  }
+
+  monitor_setup()
+</script>
 
  </body>
 </html>
