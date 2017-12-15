@@ -1,4 +1,4 @@
-var Model = require('./Model.js');
+var Model = require('./Models.js');
 var Pieces= new Model.Pieces();
 var Board= new Model.Board();
 var Moves= new Model.Moves();
