@@ -1,79 +1,71 @@
 let w = 800
 let h = 800
-let size = w / 9
+let size = w / 8
 let id2cell = {}
-
-function flip (possibleMoves, currentCellId) {
-  for (let key in id2cell) {
-    d3.select('#id' + key).classed('yay', false)
-  }
-
-  for (let key in possibleMoves) {
-    let cellId = '#id' + (currentCellId - key)
-
-    try {
-      d3.select(cellId).attr('class', 'yay')
-    // console.log('id#' + key + '   mod: ' + (currentCellId - key))
-    } catch (boom) {
-      console.log('FAIL! |' + cellId + '|')
-      console.log('ACK! ' + boom)
-    }
-
-//    d3.select('#id6').attr('class', 'yay')  // .attr('height', 2)
-  }
-
-//  d3.select('#id6').classed('yay', what)  // .attr('height', 2)
-//  console.log('SET TO ' + what)
-}
+let board = new Board()
+let pieces = new Pieces()
 
 let drag = d3.behavior.drag()
     .on('drag', function (d, i) {
       d.x += d3.event.dx
       d.y += d3.event.dy
-      // console.log('x!! ' + d.x)
       d3.select(this).attr('transform', function (d, i) { return 'translate(' + [d.x, d.y] + ')' })
     })
     .on('dragstart', function (d, i) {
-      let p = pieces[this.id]
-      // console.log('ID: ' + p.id + '   cell ' + p.cellId)
-      let possible = Moves.getPossibleMoves(p.key, p.moveCount)
-      flip(possible, p.cellId)
+      board.zeroOutInfluences()
+      let p = pieces.pieces[this.id]
+      let LoL_influences = Moves.getPossibleMoves(p.key, p.moveCount)
+      LoL_influences.forEach(potential_col_row => {
+        let col_row = Moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
+        try {
+          if (col_row != undefined) {
+            let c = col_row[0]
+            let r = col_row[1]
+            board.setInfluenced(c, r)
+          }
+        } catch (ignore) {
+          console.log('Do not setInfluenced on ' + col_row)
+        }
+      })
+      board.board.forEach((row) => {
+        row.forEach((cell) => {
+          d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
+        })
+      })
     })
     .on('dragend', function (d, i) {
-  //    console.log('stopping drag fro ' + this.id)
     })
-function populate () {
-  // the letters and numbers bordering the actual boards
-  d3.json('js/chess/border.json', function (LoH) {
-    LoH.forEach((cell) => {
-      cell.x = cell.col * size
-      cell.y = cell.row * size
-      addCell(cell)
-    })
-  })
 
-  d3.json('js/chess/board.json', function (LoH) {
-    LoH.forEach((cell, i) => {
-      cell.x = cell.col * size
-      cell.y = cell.row * size
-      cell.cx = cell.x + (size / 2)
-      cell.cy = cell.y + (size / 2)
-      id2cell[cell.i] = cell
-      addCell(cell)
+function addCell (cell) {
+  let c = d3.select('#chessboard')
+        .append('svg:g')
+        .attr('transform', 'translate(' + cell.x + ',' + cell.y + ')')
 
-      if (i == 63) {
-        for (let key in pieces) {
-          pieces[key].x = id2cell[pieces[key].cellId].x + (size / 2)
-          pieces[key].y = id2cell[pieces[key].cellId].y + (size / 2)
-          addPiece(pieces[key])
-        }
-      }
-    })
-  })
+  let background = c.append('svg:rect')
+        .attr('id', cell.id)
+        .attr('fill', cell.color)
+        .attr('fill-opacity', 1.0)
+        .attr('stroke-width', 4)
+        .attr('width', size)
+        .attr('height', size)
+
+  let text = c.append('svg:text')
+        .text(function (d) {
+          let ary = cell.id.split('_')
+          let ignore = ary[0]
+          let column = ary[1]
+          let row = ary[2]
+          return column + '  ' + row
+        })
+        .attr('transform', 'translate(' + [(size - 10) / 2, (size + 12) / 2] + ')')
+        .attr('text-anchor', 'right')
+        .attr('font-weight', 700)
+        .attr('font-family', 'Helvetica')
+        .attr('fill', '#000')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none')
 }
-populate()
-
-function addPiece (piece) {
+function addPieceIntoDom (piece) {
   let r = size / 3
   let p = d3.select('#chessboard')
         .append('svg:g')
@@ -86,17 +78,12 @@ function addPiece (piece) {
         .call(drag)
 
   let background = p.append('svg:circle')
-        .attr('class', 'cssthing')
-        .attr('fill', function (d) {
-          return '#e0e0e0'
-        })
         .attr('fill-opacity', 0.1)
         .attr('stroke', '#000')
         .attr('stroke-width', 4)
         .attr('r', r)
   let foreground = p.append('svg:text')
         .text(piece.unicode)
-//        .text(piece.key)
         .attr('y', '.1em')
         .style('font-size', 40)
         .attr('transform', 'translate(' + [0, r / 3] + ')')
@@ -108,43 +95,22 @@ function addPiece (piece) {
         .attr('pointer-events', 'none')
 }
 
-function addCell (obj) {
-  let x = obj.x// col * size
-  let y = obj.y// row * size
+function main () {
+  board.setEveryCellLocations(size)
 
-  let c = d3.select('#chessboard')
-        .append('svg:g')
-        .attr('transform', 'translate(' + x + ',' + y + ')')
-
-  let main = c.append('svg:rect')
-        .attr('id', obj.id)
-        .attr('fill', obj.color)
-        .attr('fill-opacity', 1.0)
-        .attr('stroke-width', 4)
-        .attr('width', size)
-        .attr('height', size)
-
-  let show_to_the_humans = obj.i
-  if (obj.piece == 'border') {
-    show_to_the_humans = obj.i
+  board.board.forEach(row => {
+    row.forEach(cell => {
+      addCell(cell)
+    })
+  })
+  for (let key in pieces.pieces) {
+    // console.log(key)
+    let p = pieces.pieces[key]
+    let x = board.getXLocation(p.cellId)
+    let y = board.getYLocation(p.cellId)
+    p.setXLocation(x)
+    p.setYLocation(y)
+    addPieceIntoDom(p)
   }
-
-  let text = c.append('svg:text')
-        .text(show_to_the_humans)
-        .attr('transform', 'translate(' + [(size - 10) / 2, (size + 12) / 2] + ')')
-        .attr('text-anchor', 'right')
-        .attr('font-weight', 700)
-        .attr('font-family', 'Helvetica')
-        .attr('fill', '#000')
-        .attr('stroke', 'none')
-        .attr('pointer-events', 'none')
 }
-
-let what = false
-function doSomething () {
-  what = !what
-  d3.select('#id6').classed('yay', what)  // .attr('height', 2)
-  console.log('SET TO ' + what)
-
-// d3.select('#id6').attr('class', 'yay')  // .attr('height', 2)
-}
+main()
