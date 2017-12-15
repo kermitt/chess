@@ -4,6 +4,42 @@ let size = w / 8
 let id2cell = {}
 let board = new Board()
 let pieces = new Pieces()
+let moves = new Moves()
+
+function snapto (p, x, y) {
+  board.findClosestLegalCell(x, y, size)
+  let cellId = board.findClosestLegalCell(x, y, size)
+//  p.x = 100
+//  p.y = 300
+  if (cellId.length > 0) {
+    p.x = board.getXLocation(cellId)
+    p.y = board.getYLocation(cellId)
+    p.cellId = cellId
+    console.log(JSON.stringify(p, null, 6))
+    console.log('cellId: ' + cellId)
+    d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
+  } else {
+    d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
+    console.log(JSON.stringify(p, null, 6))
+  }
+  /*
+  if (cellId.length > 0) {
+    p.x = board.getXLocation(cellId)
+    p.y = board.getYLocation(cellId)
+    p.x = 100
+    p.y = 100
+    p.key = cellId
+
+    console.log('GROM p.x: ' + p.x + '   p.y: ' + p.y + '     orig x ' + x + '   y ' + y)
+
+    d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
+  } else {
+    d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
+
+    console.log('NOPE  p.x: ' + p.x + '   p.y: ' + p.y + '     orig x ' + x + '   y ' + y)
+  }
+  */
+}
 
 let drag = d3.behavior.drag()
     .on('drag', function (d, i) {
@@ -14,17 +50,19 @@ let drag = d3.behavior.drag()
     .on('dragstart', function (d, i) {
       board.zeroOutInfluences()
       let p = pieces.pieces[this.id]
-      let LoL_influences = Moves.getPossibleMoves(p.key, p.moveCount)
+      let LoL_influences = moves.getPossibleMoves(p.key, p.moveCount)
+
       LoL_influences.forEach(potential_col_row => {
-        let col_row = Moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
+        let col_row = moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
         try {
           if (col_row != undefined) {
             let c = col_row[0]
             let r = col_row[1]
             board.setInfluenced(c, r)
+            console.log('board column ' + c + '   row ' + row)
           }
         } catch (ignore) {
-          console.log('Do not setInfluenced on ' + col_row)
+          // console.log('Do not setInfluenced on ' + col_row)
         }
       })
       board.board.forEach((row) => {
@@ -34,6 +72,15 @@ let drag = d3.behavior.drag()
       })
     })
     .on('dragend', function (d, i) {
+      let p = pieces.pieces[this.id]
+      snapto(p, d.x, d.y)
+      board.zeroOutInfluences()
+
+      board.board.forEach((row) => {
+        row.forEach((cell) => {
+          d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
+        })
+      })
     })
 
 function addCell (cell) {
