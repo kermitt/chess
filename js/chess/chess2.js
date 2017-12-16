@@ -1,24 +1,9 @@
-/* D3 stuff is hard to TDD/Unit-test...  ...This file hold only D3 things.
-There is a sister file to this, 'DisplayLogic.js' which is the companion to
-this one. I've split this and that into two in order to be able to more easily
-test that one. */
-
-function snapto (piece, x, y) {
-  board.findClosestLegalCell(x, y, size)
-  let cellId = board.findClosestLegalCell(x, y, size)
-  if (cellId.length > 0) {
-    piece.x = board.getXLocation(cellId)
-    piece.y = board.getYLocation(cellId)
-    piece.cellId = cellId
-    d3.select('#' + piece.key)
-    .data([{'x': piece.x, 'y': piece.y}])
-    .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
-  } else {
-    d3.select('#' + piece.key)
-    .data([{'x': piece.x, 'y': piece.y}])
-    .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
-  }
-}
+let w = 800
+let h = 800
+let size = w / 8
+let id2cell = {}
+let board = new Board()
+let pieces = new Pieces()
 
 let drag = d3.behavior.drag()
     .on('drag', function (d, i) {
@@ -27,24 +12,29 @@ let drag = d3.behavior.drag()
       d3.select(this).attr('transform', function (d, i) { return 'translate(' + [d.x, d.y] + ')' })
     })
     .on('dragstart', function (d, i) {
-      let piece = pieces.pieces[this.id]
-      DisplayLogic.findPossibleMoves(piece)
-      toggleInfluenceDisplay()
+      board.zeroOutInfluences()
+      let p = pieces.pieces[this.id]
+      let LoL_influences = Moves.getPossibleMoves(p.key, p.moveCount)
+      LoL_influences.forEach(potential_col_row => {
+        let col_row = Moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
+        try {
+          if (col_row != undefined) {
+            let c = col_row[0]
+            let r = col_row[1]
+            board.setInfluenced(c, r)
+          }
+        } catch (ignore) {
+          console.log('Do not setInfluenced on ' + col_row)
+        }
+      })
+      board.board.forEach((row) => {
+        row.forEach((cell) => {
+          d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
+        })
+      })
     })
     .on('dragend', function (d, i) {
-      let piece = pieces.pieces[this.id]
-      snapto(piece, d.x, d.y)
-      board.zeroOutInfluences()
-      toggleInfluenceDisplay()
     })
-
-function toggleInfluenceDisplay () {
-  board.board.forEach((row) => {
-    row.forEach((cell) => {
-      d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
-    })
-  })
-}
 
 function addCell (cell) {
   let c = d3.select('#chessboard')
@@ -104,3 +94,23 @@ function addPieceIntoDom (piece) {
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
 }
+
+function main () {
+  board.setEveryCellLocations(size)
+
+  board.board.forEach(row => {
+    row.forEach(cell => {
+      addCell(cell)
+    })
+  })
+  for (let key in pieces.pieces) {
+    // console.log(key)
+    let p = pieces.pieces[key]
+    let x = board.getXLocation(p.cellId)
+    let y = board.getYLocation(p.cellId)
+    p.setXLocation(x)
+    p.setYLocation(y)
+    addPieceIntoDom(p)
+  }
+}
+main()

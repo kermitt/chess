@@ -266,10 +266,10 @@ class Moves {
       moves.push([-1, 0])
     } else if (type === 'PAWN' && color === 'BLACK' && moveCount === 0) {
       moves.push([0, 1])
-      moves.push([0, 2])
+    //  moves.push([0, 2])
     } else if (type === 'PAWN' && color === 'WHITE' && moveCount === 0) {
       moves.push([0, -1])
-      moves.push([0, -2])
+    //  moves.push([0, -2])
     } else if (type === 'PAWN' && color === 'BLACK') {
       moves.push([0, 1])
     } else if (type === 'PAWN' && color === 'WHITE') {
