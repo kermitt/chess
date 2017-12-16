@@ -25,21 +25,35 @@
 <script>
 
 
-/*
+
   function monitor_setup() { 
     let table = "<table border='1'>"
-    for ( let key in pieces) { 
+    for ( let key in pieces.pieces) { 
       let possible_moves_div = "<div='" + key + "_move'></div>"
-      table += "<tr><td align='right'>" + key + "</td><td>&nbsp;</td><td><div='" + key + "'></div></td><td>" +  possible_moves_div + "</td></tr>"
+      table += "<tr><td align='right'>" + key + "</td><td>&nbsp;</td><td><div='" + key + "'></div></td><td>" +  possible_moves_div + "</td><td><button onclick=\"remove('" + key + "');\">Remove</button></td></tr>"
     }
     table += "</table>"
     document.getElementById("logging").innerHTML = table     
 
 
   }
+  function remove(key) {
 
+
+    let kill = []
+    for ( let key in pieces.pieces) { 
+      if ( key == "BLACK_QUEEN_1") {
+        // 
+      } else {
+        let p = pieces.pieces[key]
+        d3.select('#' + p.key).remove()
+        delete pieces.pieces[key]
+      }
+    }
+    console.log(JSON.stringify(pieces.pieces) )
+  }
   monitor_setup()
-  */
+
 </script>
 
  </body>

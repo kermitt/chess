@@ -25,6 +25,13 @@ class Piece {
   setYLocation (y) {
     this.y = y
   }
+  getColRow_currentCell () {
+    let ary = cellId.split('_')
+    let ignore = ary[0]
+    let column = parseInt(ary[1])
+    let row = parseInt(ary[2])
+    return [column, row]
+  }
 }
 // + --------------------------------------------------------------------------+
 class Pieces {
@@ -75,6 +82,30 @@ class Board {
     this.id2cell = {} // HoL
     this.setup()
   }
+  findClosestLegalCell (currentX, currentY, horizon) {
+    let closestCellId = ''
+    let current = 999999
+    this.board.forEach((row) => {
+      row.forEach((cell) => {
+        if (cell.isInfluenced == true) {
+          let x = cell.cx - currentX
+          let y = cell.cy - currentY
+          let distance = Math.sqrt((x * x) + (y * y))
+//          console.log(cell.id + '   ' + cell.cx + '    ' + cell.cy + '   d ' + distance)
+          if (distance < current) {
+            current = distance
+            closestCellId = cell.id
+          }
+        }
+      })
+    })
+
+    if (current < horizon) {
+      return closestCellId
+    }
+    return '' // none found
+  }
+
   getXLocation (key) {
     let ary = this.id2cell[key]
 
@@ -90,6 +121,7 @@ class Board {
     return this.board[col][row].cy
   }
   setInfluenced (col, row) {
+    // console.log('col: ' + col + ' row ' + row)
     this.board[col][row].isInfluenced = true
   }
 
@@ -109,10 +141,10 @@ class Board {
         o.color = j % 2 == 0 ? '#ffffff' : '#00b200'
         o.i = j
         o.isInfluenced = false
-        o.x = 1
-        o.y = 2
-        o.cx = 3
-        o.cy = 4
+        o.x = 1 // these, x, y, cx and cy will be set later
+        o.y = 2// these, x, y, cx and cy will be set later
+        o.cx = 3// these, x, y, cx and cy will be set later
+        o.cy = 4// these, x, y, cx and cy will be set later
         i++
         j++
         rows.push(o)
@@ -144,11 +176,11 @@ class Board {
 // + --------------------------------------------------------------------------+
 
 class Moves {
-  static show_possible_moves (piece) {
+  show_possible_moves (piece) {
     return this.getPossibleMoves(piece.type)
   }
 
-  static getColumnRow_viaRelativeLookup (starting_column_row, endingVector) {
+  getColumnRow_viaRelativeLookup (starting_column_row, endingVector) {
     // cr_3_3
     let ary = starting_column_row.split('_')
     let ignore = ary[0]
@@ -163,7 +195,7 @@ class Moves {
     return undefined
   }
 
-  static getID_viaRelativeLookup (starting_column_row, endingVector) {
+  getID_viaRelativeLookup (starting_column_row, endingVector) {
     // cr_3_3
     let ary = starting_column_row.split('_')
     let ignore = ary[0]
@@ -176,8 +208,8 @@ class Moves {
     }
     return result
   }
-  static getPossibleMoves (key, moveCount) {
-    console.log('getPossibleMoves: ' + key + ' mc ' + moveCount)
+  getPossibleMoves (key, moveCount) {
+    // console.log('getPossibleMoves: ' + key + ' mc ' + moveCount)
 
     // console.log('|' + key + '|')
     let ary = key.split('_')
@@ -264,4 +296,6 @@ try {
     Board: Board,
     Moves: Moves
   }
-} catch (ignore) {}
+} catch (ignore) {
+  // Export for testing purposes
+}

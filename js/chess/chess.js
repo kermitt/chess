@@ -9,36 +9,14 @@ let moves = new Moves()
 function snapto (p, x, y) {
   board.findClosestLegalCell(x, y, size)
   let cellId = board.findClosestLegalCell(x, y, size)
-//  p.x = 100
-//  p.y = 300
   if (cellId.length > 0) {
     p.x = board.getXLocation(cellId)
     p.y = board.getYLocation(cellId)
     p.cellId = cellId
-    console.log(JSON.stringify(p, null, 6))
-    console.log('cellId: ' + cellId)
     d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
   } else {
     d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
-    console.log(JSON.stringify(p, null, 6))
   }
-  /*
-  if (cellId.length > 0) {
-    p.x = board.getXLocation(cellId)
-    p.y = board.getYLocation(cellId)
-    p.x = 100
-    p.y = 100
-    p.key = cellId
-
-    console.log('GROM p.x: ' + p.x + '   p.y: ' + p.y + '     orig x ' + x + '   y ' + y)
-
-    d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
-  } else {
-    d3.select('#' + p.key).data([{'x': p.x, 'y': p.y}]).attr('transform', 'translate(' + p.x + ',' + p.y + ')')
-
-    console.log('NOPE  p.x: ' + p.x + '   p.y: ' + p.y + '     orig x ' + x + '   y ' + y)
-  }
-  */
 }
 
 let drag = d3.behavior.drag()
@@ -54,6 +32,9 @@ let drag = d3.behavior.drag()
 
       LoL_influences.forEach(potential_col_row => {
         let col_row = moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
+
+        console.log('p.cellId ' + p.cellId + '    and ' + col_row + '  cellId ' + p.cellId + ' this.di ' + this.id)
+
         try {
           if (col_row != undefined) {
             let c = col_row[0]
