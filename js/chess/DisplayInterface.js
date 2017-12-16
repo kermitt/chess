@@ -1,4 +1,4 @@
-/* D3 stuff is hard to TDD/Unit-test...  ...This file hold only D3 things.
+/* D3 stuff is hard to TDD/Unit-test...  ...This file holds only D3 things.
 There is a sister file to this, 'DisplayLogic.js' which is the companion to
 this one. I've split this and that into two in order to be able to more easily
 test that one. */
