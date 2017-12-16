@@ -26,7 +26,7 @@ class Piece {
     this.y = y
   }
   getColRow_currentCell () {
-    let ary = cellId.split('_')
+    let ary = this.cellId.split('_')
     let ignore = ary[0]
     let column = parseInt(ary[1])
     let row = parseInt(ary[2])

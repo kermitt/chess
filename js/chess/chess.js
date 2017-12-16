@@ -6,6 +6,31 @@ let board = new Board()
 let pieces = new Pieces()
 let moves = new Moves()
 
+function influence (col, row, vectorY, vectorX, pieces_whichCell_whichColor) {
+  try {
+    let potential = board.board[col][row]
+    if (potential != undefined) {
+      let c = col + vectorY
+      let r = row + vectorX
+
+      if (c < 8 && c >= 0 && r < 8 && r >= 0) {
+        let cellId = 'cr_' + c + '_' + r
+        board.setInfluenced(c, r)
+        // console.log('Move' + col + ', ' + row + '  ---> ' + vectorX + ', ' + vectorY + ' checking for ' + cellId)
+
+        if (!pieces_whichCell_whichColor.hasOwnProperty(cellId)) {
+          influence(c, r, vectorY, vectorX, pieces_whichCell_whichColor)
+        } else {
+          // console.log('Stopping at ' + cellId + ' because ' + pieces_whichCell_whichColor[cellId])
+        }
+      }
+    } else {
+    }
+  } catch (boom) {
+    console.log('Boom: ' + boom)
+  }
+}
+
 function snapto (p, x, y) {
   board.findClosestLegalCell(x, y, size)
   let cellId = board.findClosestLegalCell(x, y, size)
@@ -28,13 +53,24 @@ let drag = d3.behavior.drag()
     .on('dragstart', function (d, i) {
       board.zeroOutInfluences()
       let p = pieces.pieces[this.id]
-      let LoL_influences = moves.getPossibleMoves(p.key, p.moveCount)
 
+      let pieces_whichCell_whichColor = {}
+      for (let key in pieces.pieces) {
+        let blackOrWhite = pieces.pieces[key].color
+        let cId = pieces.pieces[key].cellId
+        pieces_whichCell_whichColor[cId] = blackOrWhite
+      }
+
+      let col_row = p.getColRow_currentCell()
+
+      // console.log(JSON.stringify(col_row, null, 6))
+      let LoL_influences = moves.getPossibleMoves(p.key, p.moveCount)
+      LoL_influences.forEach((tuple) => {
+        influence(col_row[0], col_row[1], tuple[0], tuple[1], pieces_whichCell_whichColor)
+      })
       LoL_influences.forEach(potential_col_row => {
         let col_row = moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
-
-        console.log('p.cellId ' + p.cellId + '    and ' + col_row + '  cellId ' + p.cellId + ' this.di ' + this.id)
-
+        // console.log('p.cellId ' + p.cellId + '    and ' + col_row + '  cellId ' + p.cellId + ' this.di ' + this.id)
         try {
           if (col_row != undefined) {
             let c = col_row[0]
@@ -46,6 +82,7 @@ let drag = d3.behavior.drag()
           // console.log('Do not setInfluenced on ' + col_row)
         }
       })
+
       board.board.forEach((row) => {
         row.forEach((cell) => {
           d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
