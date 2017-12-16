@@ -1,3 +1,6 @@
+
+/* The chess pieces are actually unicode, so to prevent them from being 
+highlighted... */ e
 svg text {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -10,33 +13,10 @@ svg text {
 
 
 
-/*
-.active {
-  stroke: #000;
-  stroke-width: 2px;
-}
-
- .cssthing {
-    fill: rgb(255,255,255);
-   stroke: rgb(0,0,200);
- }
-
-*/
-
- .influenced {
+/* Paint cells different colors */
+.influenced {
   fill:#ffe34c;
 }
-
- .yay {
-  
-/*  fill:#ADFF2F;*/
-fill:#ffe34c;
-  }
-
-/*
-.choice {
-  stroke: #000000;
-  stroke-width: 20px;
+.attackable {
+  fill:#ffa500;
 }
-*/
-
