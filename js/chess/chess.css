@@ -1,6 +1,6 @@
 
 /* The chess pieces are actually unicode, so to prevent them from being 
-highlighted... */ e
+highlighted... */
 svg text {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
