@@ -98,7 +98,7 @@ function sortPieces () {
   //  let p = pieces.pieces[k]
   //  console.log(k + '\t' + p.cellId)
   // }
-// tyler.hoppe [1:49 PM]
+
 // let x = [{name: 'bob', age: 55}, {name: 'bob', age: 12}, {name: 'alice', age: 12}, {name: 'zoo', age: 12}]
 // x.sort((personA, personB) => personA.name > personB.name).sort((personA, personB) => personA.age > personB.age).filter(a => a.name === 'bob')
 }
@@ -113,10 +113,10 @@ function unroll (obj) {
   console.log(JSON.stringify(obj, null, 6))
 }
 function main () {
-  // dragStart_test()
-  // snapToComponent_findClosestLegalCell()
-  // getXYOfACell()
+  dragStart_test()
+  snapToComponent_findClosestLegalCell()
+  getXYOfACell()
   influenceTest()
-  sortPieces()
+//  sortPieces()
 }
 main()
