@@ -56,6 +56,10 @@ function sortPieces () {
 // x.sort((personA, personB) => personA.name > personB.name).sort((personA, personB) => personA.age > personB.age).filter(a => a.name === 'bob')
 }
 
+function testInfluence () {
+
+}
+
 // + ----------------------------------- +
 
 function log (pass_or_fail, msg) {
@@ -69,6 +73,7 @@ function main () {
   dragStart_test()
   snapToComponent_findClosestLegalCell()
   getXYOfACell()
+  testInfluence()
 //  sortPieces()
 }
 main()

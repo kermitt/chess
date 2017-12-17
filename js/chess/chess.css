@@ -20,3 +20,6 @@ svg text {
 .attackable {
   fill:#ffa500;
 }
+.supported {
+  fill:#0000ff;
+}

@@ -42,6 +42,8 @@ function toggleInfluenceDisplay () {
   board.board.forEach((row) => {
     row.forEach((cell) => {
       d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
+      d3.select('#' + cell.id).classed('attackable', cell.isAttacked)
+      d3.select('#' + cell.id).classed('supported', cell.isSupported)
     })
   })
 }

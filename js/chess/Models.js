@@ -91,7 +91,6 @@ class Board {
           let x = cell.cx - currentX
           let y = cell.cy - currentY
           let distance = Math.sqrt((x * x) + (y * y))
-//          console.log(cell.id + '   ' + cell.cx + '    ' + cell.cy + '   d ' + distance)
           if (distance < current) {
             current = distance
             closestCellId = cell.id
@@ -103,7 +102,7 @@ class Board {
     if (current < horizon) {
       return closestCellId
     }
-    return '' // none found
+    return ''
   }
 
   getXLocation (key) {
@@ -124,7 +123,14 @@ class Board {
     // console.log('col: ' + col + ' row ' + row)
     this.board[col][row].isInfluenced = true
   }
-
+  setIsAttacked (col, row) {
+    // console.log('col: ' + col + ' row ' + row)
+    this.board[col][row].isAttacked = true
+  }
+  setIsSupported (col, row) {
+    // console.log('col: ' + col + ' row ' + row)
+    this.board[col][row].isSupported = true
+  }
   show () {
     console.log(JSON.stringify(this.board, null, 6))
   }
@@ -141,6 +147,8 @@ class Board {
         o.color = j % 2 == 0 ? '#ffffff' : '#00b200'
         o.i = j
         o.isInfluenced = false
+        o.isAttacked = false
+        o.isSupported = false
         o.x = 1 // these, x, y, cx and cy will be set later
         o.y = 2// these, x, y, cx and cy will be set later
         o.cx = 3// these, x, y, cx and cy will be set later
@@ -169,6 +177,8 @@ class Board {
     this.board.forEach(row => {
       row.forEach(cell => {
         cell.isInfluenced = false
+        cell.isAttacked = false
+        cell.isSupported = false
       })
     })
   }

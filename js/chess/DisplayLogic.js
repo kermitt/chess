@@ -39,17 +39,41 @@ class DisplayLogic {
 
         if (c < 8 && c >= 0 && r < 8 && r >= 0) {
           let cellId = 'cr_' + c + '_' + r
-          board.setInfluenced(c, r)
+
+        //  log(JSON.stringify(potential, null, 6))
+
+          let hit = pieces_whichCell_whichColor.hasOwnProperty(cellId)
+          if (hit === true) {
+            let otherPieceColor = pieces_whichCell_whichColor[cellId]
+
+            if (pieceColor != otherPieceColor) {
+              log('ATTACK ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
+
+              board.setIsAttacked(c, r)
+            } else {
+              log('SUPPORT ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
+
+              board.setIsSupported(c, r)
+            }
+          } else {
+            log('INFLUENCE ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color)
+
+            board.setInfluenced(c, r)
+          }
 
           if (!pieces_whichCell_whichColor.hasOwnProperty(cellId)) {
-            let cellColor = pieces_whichCell_whichColor[cellId]
+            // let cellColor = pieces_whichCell_whichColor[cellId]
 
-            console.log('not ' + pieceColor + '    >' + cellColor + '< : cellId ' + cellId + ' col ' + col + ', ' + row + '  ---> ' + vectorX + ', ' + vectorY + ' checking for ' + cellId)
+          //  log('CONTINUE ' + pieceColor + '    cellId ' + cellId)
             this.influence(pieceColor, c, r, vectorY, vectorX, pieces_whichCell_whichColor)
           } else {
+          //  log('STOP ' + pieceColor + '    >' + cellColor + '< : cellId ' + cellId + ' col ' + col + ', ' + row + '  ---> ' + vectorX + ', ' + vectorY + ' checking for ' + cellId)
           }
+        } else {
+          // log('IMPOSSIBLE c ' + c + ' r ' + r)
         }
       } else {
+        // log('IMPOSSIBLE col ' + col + ' row ' + row)
       }
     } catch (boom) {
       console.log('Boom: ' + boom)
