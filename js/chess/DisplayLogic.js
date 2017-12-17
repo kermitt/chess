@@ -23,7 +23,7 @@ class DisplayLogic {
         if (col_row != undefined) {
           let c = col_row[0]
           let r = col_row[1]
-          board.setInfluenced(c, r)
+//          board.setInfluenced(c, r)
         }
       } catch (ignore) {
       }
@@ -47,16 +47,16 @@ class DisplayLogic {
             let otherPieceColor = pieces_whichCell_whichColor[cellId]
 
             if (pieceColor != otherPieceColor) {
-              log('ATTACK ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
+              log('!!ATTACK ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
 
               board.setIsAttacked(c, r)
             } else {
-              log('SUPPORT ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
+              log('!!SUPPORT ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
 
               board.setIsSupported(c, r)
             }
           } else {
-            log('INFLUENCE ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color)
+            log('!!INFLUENCE ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color)
 
             board.setInfluenced(c, r)
           }

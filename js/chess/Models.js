@@ -285,16 +285,6 @@ class Moves {
     } else if (type === 'PAWN' && color === 'WHITE') {
       moves.push([0, -1])
     }
-    /*
-    console.log('.........')
-    for (let key in moves) {
-      console.log(key + '    ' + moves[key])
-    }
-    console.log('type: |' + type)
-    console.log('col: |' + color)
-
-    console.log('>>>>>>>>>>')
-    */
     return moves
   }
 }
