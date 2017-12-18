@@ -9,8 +9,7 @@ function dragStart_test () {
   let p = pieces.pieces[id_from_d3]
   let LoL_influences = moves.getPossibleMoves(p.key, p.moveCount)
 
-  let isOk = LoL_influences[0][0] == 0 && LoL_influences[0].length == 2
-
+  let isOk = LoL_influences[0][0] == 0 && LoL_influences[0].length == 3 
   log(isOk, 'dragStart_test')
 }
 

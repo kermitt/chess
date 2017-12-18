@@ -31,7 +31,7 @@ class DisplayLogic {
       pieces_whichCell_whichColor[cId] = blackOrWhite
     }
     let col_row = p.getColRow_currentCell()
-    let LoL_influences = moves.getPossibleMoves(p.key, p.moveCount)
+    let LoL_influences = moves.getPossibleMoves(p.key, p.getMoveCount())
     LoL_influences.forEach((tuple) => {
       let columnMovement = tuple[0]
       let rowMovement = tuple[1]
@@ -40,7 +40,7 @@ class DisplayLogic {
       this.influence(p.color, col_row[0], col_row[1], columnMovement, rowMovement, pieces_whichCell_whichColor, possibleMoveCount, 0)
     })
     LoL_influences.forEach(potential_col_row => {
-      let col_row = moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
+      let col_row = moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row, p.getMoveCount())
       try {
         if (col_row != undefined) {
           let c = col_row[0]

@@ -7,31 +7,27 @@ function snapto (piece, x, y) {
   board.findClosestLegalCell(x, y, size)
   let cellId = board.findClosestLegalCell(x, y, size)
   if (cellId.length > 0) {
+    // Snap to the new cell!
     isAttacked = board.getIsAttacked(cellId)
 
     log(cellId + '   attacked! ' + isAttacked)
     if (isAttacked) {
       DisplayLogic.killPieceOnThisCell(cellId)
     }
-//    for (let key in board.id2cell) {
-//      log(key + '    ' + board.id2cell[key] + '    ' + cellId)
-//    }
-
-  //  log('isAttacked? ' + board.getIsAttacked())
-
     piece.x = board.getXLocation(cellId)
     piece.y = board.getYLocation(cellId)
+    piece.addMoveCount()
     piece.cellId = cellId
     d3.select('#' + piece.key)
     .data([{'x': piece.x, 'y': piece.y}])
     .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
   } else {
+    // Snap back to the original cell!
     d3.select('#' + piece.key)
     .data([{'x': piece.x, 'y': piece.y}])
     .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
   }
 }
-
 let drag = d3.behavior.drag()
     .on('drag', function (d, i) {
       d.x += d3.event.dx

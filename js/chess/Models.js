@@ -12,6 +12,12 @@ class Piece {
     this.num = ''
     this.key = ''
   }
+  addMoveCount () {
+    this.moveCount++
+  }
+  getMoveCount () {
+    return this.moveCount
+  }
   finishSetup (key) {
     let ary = key.split('_')
     this.color = ary[0]
@@ -129,21 +135,16 @@ class Board {
     return this.board[col][row].cy
   }
   setInfluenced (col, row) {
-    // console.log('col: ' + col + ' row ' + row)
     this.board[col][row].isInfluenced = true
   }
   setIsAttacked (col, row) {
-    // console.log('col: ' + col + ' row ' + row)
     this.board[col][row].isAttacked = true
   }
 
   setIsSupported (col, row) {
-    // console.log('col: ' + col + ' row ' + row)
     this.board[col][row].isSupported = true
   }
-  show () {
-    console.log(JSON.stringify(this.board, null, 6))
-  }
+
   setup () {
     let i = 0
     let j = 0
@@ -196,9 +197,9 @@ class Board {
 // + --------------------------------------------------------------------------+
 
 class Moves {
-  show_possible_moves (piece) {
-    return this.getPossibleMoves(piece.type)
-  }
+  // show_possible_moves (piece) {
+  //  return this.getPossibleMoves(piece.type)
+ // }
 
   getColumnRow_viaRelativeLookup (starting_column_row, endingVector) {
     // cr_3_3
@@ -229,9 +230,6 @@ class Moves {
     return result
   }
   getPossibleMoves (key, moveCount) {
-    // console.log('getPossibleMoves: ' + key + ' mc ' + moveCount)
-
-    // console.log('|' + key + '|')
     let ary = key.split('_')
     let color = ary[0]
     let type = ary[1]
