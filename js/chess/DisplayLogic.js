@@ -3,6 +3,24 @@ class DisplayLogic {
   static unroll (o) {
     console.log(JSON.stringify(o, null, 6))
   }
+
+  static killPieceOnThisCell (cellId) {
+    for (let key in pieces.pieces) {
+      if (cellId === pieces.pieces[key].cellId) {
+        log('KILL cellId ' + JSON.stringify(pieces.pieces[key], null, 6))
+        d3.select('#' + pieces.pieces[key].key).remove()
+
+        let domId = 'killed' + pieces.pieces[key].color // 'WHITE' or 'BLACK'
+
+        let current = document.getElementById(domId).innerHTML
+        let more = pieces.pieces[key].unicode + '<br>' + current
+        document.getElementById(domId).innerHTML = more
+
+        delete pieces.pieces[key]
+      }
+    }
+  }
+
   static findPossibleMoves (p) {
     board.zeroOutInfluences()
 
@@ -23,7 +41,6 @@ class DisplayLogic {
         if (col_row != undefined) {
           let c = col_row[0]
           let r = col_row[1]
-//          board.setInfluenced(c, r)
         }
       } catch (ignore) {
       }
@@ -36,28 +53,22 @@ class DisplayLogic {
       if (potential != undefined) {
         let c = col + vectorY
         let r = row + vectorX
-
         if (c < 8 && c >= 0 && r < 8 && r >= 0) {
           let cellId = 'cr_' + c + '_' + r
-
-        //  log(JSON.stringify(potential, null, 6))
-
           let hit = pieces_whichCell_whichColor.hasOwnProperty(cellId)
           if (hit === true) {
             let otherPieceColor = pieces_whichCell_whichColor[cellId]
 
             if (pieceColor != otherPieceColor) {
-              log('!!ATTACK ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
-
+              // log('!!ATTACK ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
               board.setIsAttacked(c, r)
+              board.setInfluenced(c, r)
             } else {
-              log('!!SUPPORT ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
-
+              // log('!!SUPPORT ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
               board.setIsSupported(c, r)
             }
           } else {
-            log('!!INFLUENCE ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color)
-
+            // log('!!INFLUENCE ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color)
             board.setInfluenced(c, r)
           }
 

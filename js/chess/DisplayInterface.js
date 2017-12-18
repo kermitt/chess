@@ -7,6 +7,18 @@ function snapto (piece, x, y) {
   board.findClosestLegalCell(x, y, size)
   let cellId = board.findClosestLegalCell(x, y, size)
   if (cellId.length > 0) {
+    isAttacked = board.getIsAttacked(cellId)
+
+    log(cellId + '   attacked! ' + isAttacked)
+    if (isAttacked) {
+      DisplayLogic.killPieceOnThisCell(cellId)
+    }
+//    for (let key in board.id2cell) {
+//      log(key + '    ' + board.id2cell[key] + '    ' + cellId)
+//    }
+
+  //  log('isAttacked? ' + board.getIsAttacked())
+
     piece.x = board.getXLocation(cellId)
     piece.y = board.getYLocation(cellId)
     piece.cellId = cellId

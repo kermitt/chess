@@ -23,3 +23,6 @@ svg text {
 .supported {
   fill:#0000ff;
 }
+.killed {
+ font-size: 200%;
+}

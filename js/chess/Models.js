@@ -105,6 +105,15 @@ class Board {
     return ''
   }
 
+  getIsAttacked (key) {
+    let ary = this.id2cell[key]
+
+    let col = ary[0]
+    let row = ary[1]
+
+    return this.board[col][row].isAttacked
+  }
+
   getXLocation (key) {
     let ary = this.id2cell[key]
 
@@ -127,6 +136,7 @@ class Board {
     // console.log('col: ' + col + ' row ' + row)
     this.board[col][row].isAttacked = true
   }
+
   setIsSupported (col, row) {
     // console.log('col: ' + col + ' row ' + row)
     this.board[col][row].isSupported = true
