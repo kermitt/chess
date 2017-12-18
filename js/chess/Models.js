@@ -237,63 +237,53 @@ class Moves {
     let type = ary[1]
     let num = ary[2]
 
-    // key = relative cell id from the current id
-    // e.g., on cell(30) then cell(31) would be one more towards
-    // the black side from the white side. This would be recorded here
-    // as moves[1] = 1
-    //
-    // A value of '1' = can only move once.
-    // A value of '7' = can move up to 7 times
+    // [relativeColumnMovement, relativeRowMovement, numberOfPossibleMoves]
     let moves = []
     if (type === 'ROOK') {
-      moves.push([0, 1])
-      moves.push([0, -1])
-      moves.push([1, 0])
-      moves.push([-1, 0])
+      moves.push([0, 1, 7])
+      moves.push([0, -1, 7])
+      moves.push([1, 0, 7])
+      moves.push([-1, 0, 7])
     } else if (type === 'KNIGHT') {
-      moves.push([-1, -2])
-      moves.push([1, -2])
-      moves.push([2, -1])
-      moves.push([2, 1])
-
-      moves.push([1, 2])
-      moves.push([-1, 2])
-
-      moves.push([-2, 1])
-      moves.push([-2, -1])
+      moves.push([-1, -2, 1])
+      moves.push([1, -2, 1])
+      moves.push([2, -1, 1])
+      moves.push([2, 1, 1])
+      moves.push([1, 2, 1])
+      moves.push([-1, 2, 1])
+      moves.push([-2, 1, 1])
+      moves.push([-2, -1, 1])
     } else if (type === 'BISHOP') {
-      moves.push([-1, -1])
-      moves.push([1, -1])
-      moves.push([1, 1])
-      moves.push([-1, 1])
+      moves.push([-1, -1, 7])
+      moves.push([1, -1, 7])
+      moves.push([1, 1, 7])
+      moves.push([-1, 1, 7])
     } else if (type === 'QUEEN') {
-      moves.push([-1, -1])
-      moves.push([1, -1])
-      moves.push([1, 1])
-      moves.push([-1, 1])
-      moves.push([0, 1])
-      moves.push([0, -1])
-      moves.push([1, 0])
-      moves.push([-1, 0])
+      moves.push([-1, -1, 7])
+      moves.push([1, -1, 7])
+      moves.push([1, 1, 7])
+      moves.push([-1, 1, 7])
+      moves.push([0, 1, 7])
+      moves.push([0, -1, 7])
+      moves.push([1, 0, 7])
+      moves.push([-1, 0, 7])
     } else if (type === 'KING') {
-      moves.push([-1, -1])
-      moves.push([1, -1])
-      moves.push([1, 1])
-      moves.push([-1, 1])
-      moves.push([0, 1])
-      moves.push([0, -1])
-      moves.push([1, 0])
-      moves.push([-1, 0])
+      moves.push([-1, -1, 1])
+      moves.push([1, -1, 1])
+      moves.push([1, 1, 1])
+      moves.push([-1, 1, 1])
+      moves.push([0, 1, 1])
+      moves.push([0, -1, 1])
+      moves.push([1, 0, 1])
+      moves.push([-1, 0, 1])
     } else if (type === 'PAWN' && color === 'BLACK' && moveCount === 0) {
-      moves.push([0, 1])
-    //  moves.push([0, 2])
+      moves.push([0, 1, 2])
     } else if (type === 'PAWN' && color === 'WHITE' && moveCount === 0) {
-      moves.push([0, -1])
-    //  moves.push([0, -2])
+      moves.push([0, -1, 2])
     } else if (type === 'PAWN' && color === 'BLACK') {
-      moves.push([0, 1])
+      moves.push([0, 1, 1])
     } else if (type === 'PAWN' && color === 'WHITE') {
-      moves.push([0, -1])
+      moves.push([0, -1, 1])
     }
     return moves
   }

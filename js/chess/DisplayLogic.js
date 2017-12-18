@@ -33,7 +33,11 @@ class DisplayLogic {
     let col_row = p.getColRow_currentCell()
     let LoL_influences = moves.getPossibleMoves(p.key, p.moveCount)
     LoL_influences.forEach((tuple) => {
-      this.influence(p.color, col_row[0], col_row[1], tuple[0], tuple[1], pieces_whichCell_whichColor)
+      let columnMovement = tuple[0]
+      let rowMovement = tuple[1]
+      let possibleMoveCount = tuple[2]
+//      this.influence(p.color, col_row[0], col_row[1], tuple[0], tuple[1], pieces_whichCell_whichColor)
+      this.influence(p.color, col_row[0], col_row[1], columnMovement, rowMovement, pieces_whichCell_whichColor, possibleMoveCount, 0)
     })
     LoL_influences.forEach(potential_col_row => {
       let col_row = moves.getColumnRow_viaRelativeLookup(p.cellId, potential_col_row)
@@ -47,8 +51,9 @@ class DisplayLogic {
     })
   }
 
-  static influence (pieceColor, col, row, vectorY, vectorX, pieces_whichCell_whichColor) {
-    try {
+  static influence (pieceColor, col, row, vectorY, vectorX, pieces_whichCell_whichColor, possibleMoveCount, currentMoveCount) {
+    currentMoveCount++
+    if (currentMoveCount <= possibleMoveCount) {
       let potential = board.board[col][row]
       if (potential != undefined) {
         let c = col + vectorY
@@ -58,36 +63,20 @@ class DisplayLogic {
           let hit = pieces_whichCell_whichColor.hasOwnProperty(cellId)
           if (hit === true) {
             let otherPieceColor = pieces_whichCell_whichColor[cellId]
-
             if (pieceColor != otherPieceColor) {
-              // log('!!ATTACK ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
               board.setIsAttacked(c, r)
               board.setInfluenced(c, r)
             } else {
-              // log('!!SUPPORT ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color + '   hit ' + hit + '    ' + otherPieceColor)
               board.setIsSupported(c, r)
             }
           } else {
-            // log('!!INFLUENCE ' + c + ' r ' + r + '  color ' + pieceColor + '    potential ' + potential.color)
             board.setInfluenced(c, r)
           }
-
           if (!pieces_whichCell_whichColor.hasOwnProperty(cellId)) {
-            // let cellColor = pieces_whichCell_whichColor[cellId]
-
-          //  log('CONTINUE ' + pieceColor + '    cellId ' + cellId)
-            this.influence(pieceColor, c, r, vectorY, vectorX, pieces_whichCell_whichColor)
-          } else {
-          //  log('STOP ' + pieceColor + '    >' + cellColor + '< : cellId ' + cellId + ' col ' + col + ', ' + row + '  ---> ' + vectorX + ', ' + vectorY + ' checking for ' + cellId)
+            this.influence(pieceColor, c, r, vectorY, vectorX, pieces_whichCell_whichColor, possibleMoveCount, currentMoveCount)
           }
-        } else {
-          // log('IMPOSSIBLE c ' + c + ' r ' + r)
         }
-      } else {
-        // log('IMPOSSIBLE col ' + col + ' row ' + row)
       }
-    } catch (boom) {
-      console.log('Boom: ' + boom)
     }
   }
 }
