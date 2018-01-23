@@ -153,5 +153,7 @@ try {
     pieces: pieces
   }
 } catch (ignore) {
-  // Export for testing purposes
+  // Export for testing purposes...
+  // If this 'error' occures, then that means that the context is a browser.
+  // QED : Not an error
 }
