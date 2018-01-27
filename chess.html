@@ -5,15 +5,16 @@
 <style>
 
 /* The chess pieces are actually unicode, so to prevent them from being highlighted... */
-/* I got this CSS from stackoverflow */
+/* I got this CSS from stackoverflow... the chess pieces are actually unicode and */
+/* the browser 'wanted' to highlight them during drag-and-dropping actions sweep over them. */
+/* The 'svg text' css prevents that. */
 svg text {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
 #chessboard {
@@ -64,19 +65,27 @@ svg text {
 
 </script>
 
-<script type="text/javascript" src="js/simple/DisplayInterface.js"></script>
+<script type="text/javascript" src="js/simple/DisplayLogic.js"></script>
 <script type="text/javascript" src="js/simple/Board.js"></script>
 
 
 <script>
 const SIZE = 800 / 8
-
 let board = new Board(SIZE)
 board.board.forEach((row) => {
   row.forEach((cell)=> {
     addCell(cell)
   })
 })
+
+for ( let key in pieces ) {
+  let piece = pieces[key]
+  let cell = board.getCell( piece.column, piece.row)
+  piece.x = cell.px
+  piece.y = cell.py
+  addPieceIntoDom(piece)
+}
+
 
 
 </script>

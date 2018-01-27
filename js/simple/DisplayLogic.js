@@ -25,6 +25,7 @@ function snapto (piece, x, y) {
   }
 }
 */
+
 let drag = d3.behavior.drag()
     .on('drag', function (d, i) {
       d.x += d3.event.dx
@@ -68,8 +69,76 @@ function addCell (cell) {
         .attr('width', SIZE)
         .attr('height', SIZE)
 
-  let text = c.append('svg:text')
-        .text(cell.id)
+        /// / TODO: REMOVE THE BELOW TEXT
+
+  let down = -40
+  // id
+  c.append('svg:text')
+        .text('id: ' + cell.id)
+        .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
+        .attr('text-anchor', 'right')
+        .attr('font-weight', 700)
+        .attr('font-family', 'Helvetica')
+        .attr('fill', '#000')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none')
+        /*
+  down += 30
+  // x
+  c.append('svg:text')
+        .text('x: ' + cell.x)
+        .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
+        .attr('text-anchor', 'right')
+          .attr('font-weight', 700)
+          .attr('font-family', 'Helvetica')
+        .attr('fill', '#000')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none')
+
+  down += 30
+    // y
+  c.append('svg:text')
+        .text('y: ' + cell.y)
+        .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
+        .attr('text-anchor', 'right')
+          .attr('font-weight', 700)
+          .attr('font-family', 'Helvetica')
+        .attr('fill', '#000')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none')
+
+        // COLUMN
+  down += 30
+
+  c.append('svg:text')
+        .text('c: ' + cell.col)
+        .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
+        .attr('text-anchor', 'right')
+          .attr('font-weight', 700)
+          .attr('font-family', 'Helvetica')
+        .attr('fill', '#000')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none')
+
+        // ROW
+  down += 30
+
+  c.append('svg:text')
+        .text('r: ' + cell.row)
+        .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
+        .attr('text-anchor', 'right')
+          .attr('font-weight', 700)
+          .attr('font-family', 'Helvetica')
+        .attr('fill', '#000')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none')
+
+        */
+}
+
+/*
+function() {
+        .text(cell.id )
         .attr('transform', 'translate(' + [(SIZE - 10) / 2, (SIZE + 12) / 2] + ')')
         .attr('text-anchor', 'right')
         .attr('font-weight', 700)
@@ -77,9 +146,13 @@ function addCell (cell) {
         .attr('fill', '#000')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
-}
 
-function addPieceIntoDom (piece) {
+}
+*/
+
+function addPieceIntoDom (piece, size) {
+  // console.log(JSON.stringify(piece, null, 6) + ' \n ***** ')
+
   let r = SIZE / 3
   let p = d3.select('#chessboard')
         .append('svg:g')
