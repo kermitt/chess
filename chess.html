@@ -1,28 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head><title>Chess</title>
-<link rel="stylesheet" type="text/css" href="js/chess/chess.css">
-<script src='js/chess/Models.js'></script>
+
+<style>
+
+/* The chess pieces are actually unicode, so to prevent them from being highlighted... */
+/* I got this CSS from stackoverflow */
+svg text {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+#chessboard {
+  border-style: solid;
+}
+
+/* Paint cells different colors in different situations*/
+.influenced {
+  fill:#ffe34c;
+}
+.attackable {
+  fill:#ffa500;
+}
+.supported {
+  fill:#0000ff;
+}
+.killed {
+ font-size: 200%;
+}
+
+
+
+</style>
+
+
 <script src='js/svg/d3.v2.js'></script>
 </head>
 <body>
-<button onclick="zap();">zap</button><hr> <!-- remove this --> 
-<table border='1'><tr>
-<td><svg id="chessboard" width="800" height="800"></svg></td>
-<td valign='top'> <div id='killedWHITE' class='killed'></div></td>
-<td valign='top'> <div id='killedBLACK' class='killed'></div></td>
-<td valign="top"><textarea rows="60" cols="120" id='log'></textarea></td>
-</tr></table>
 
-
+<table border='0'>
+  <tr><td>
+<svg id="chessboard" width="800" height="800"></svg></td>
+</td><td>
+</td>
+</tr>
+</table>
 
 <script>
-  // TODO: Remove this part.
-  function zap() {
-    count = 1
-    document.getElementById("log").value = ""
-  }
-  let count = 1
+    let count = 1
+
   function log( msg) {
     let x = document.getElementById("log").value
     result = count + " : " + msg + "\n" + x
@@ -31,43 +62,27 @@
   } 
 
 
-
-
-  function monitor_setup() { 
-    /*
-    let table = "<table border='1'>"
-    for ( let key in pieces.pieces) { 
-      let possible_moves_div = "<div='" + key + "_move'></div>"
-      table += "<tr><td align='right'>" + key + "</td><td>&nbsp;</td><td><div='" + key + "'></div></td><td>" +  possible_moves_div + "</td><td><button onclick=\"remove('" + key + "');\">Remove</button></td></tr>"
-    }
-    table += "</table>"
-    document.getElementById("logging").innerHTML = table     
-    */
-  }
-  function remove(key) {
-    /*
-    let kill = []
-    for ( let key in pieces.pieces) { 
-      if ( key == "BLACK_QUEEN_1") {
-        // 
-      } else {
-        let p = pieces.pieces[key]
-        d3.select('#' + p.key).remove()
-        delete pieces.pieces[key]
-      }
-    }
-    console.log(JSON.stringify(pieces.pieces) )
-    */
-  }
 </script>
 
+<script type="text/javascript" src="js/simple/DisplayInterface.js"></script>
+<script type="text/javascript" src="js/simple/Board.js"></script>
 
-<script type="text/javascript" src="js/chess/DisplayLogic.js"></script>
-<script type="text/javascript" src="js/chess/DisplayInterface.js"></script>
-<script type="text/javascript" src="js/chess/Main.js"></script>
 
 <script>
-  monitor_setup()
+const SIZE = 800 / 8
+
+let board = new Board(SIZE)
+board.board.forEach((row) => {
+  row.forEach((cell)=> {
+    addCell(cell)
+  })
+})
+
+
 </script>
+
+
+
+
 </body>
 </html>

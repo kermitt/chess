@@ -1,29 +1,23 @@
-
 const WHITE = 'white'
 const BLACK = 'black'
 
 class Piece {
-  constructor (unicode, column, row, color, name) {
+  constructor (unicode, column, row, color, name, possibleSpaces) {
     this.unicode = unicode // diplay
     this.column = column // col
     this.row = row // row
     this.color = color // side
     this.name = name // name
     this.moveCount = 0 // this will be important for Castling and En-passant... and, hopefully, for analytics
-    this.possibleSpaces = -1 // numberOfPossibleSpacesToMove
+    this.possibleSpaces = possibleSpaces// # possible spaces - this will get weird for pawns
 
-    this.moves = [] // This will be an array of arrays...  for example, a Rook will be
-    // [[0, 1],[0, -1],[1, 0],[-1, 0]]...  for example, if a Rook were on row4, cell4 then would be possible to move to
-    // row4, cell5 by applying the [0,1] move
-    //
-    // i.e., this.moves is a [ [row, col], [row, col]... etc etc ]
+    this.moves = [] // This will be an array of arrays...
   }
 }
 
 class King extends Piece {
   constructor (unicode, column, row, color, name) {
-    super(unicode, column, row, color, name)
-    this.possibleSpaces = 7
+    super(unicode, column, row, color, name, 7)
     this.moves = [
     [-1, -1],
     [1, -1],
@@ -38,8 +32,7 @@ class King extends Piece {
 }
 class Queen extends Piece {
   constructor (unicode, column, row, color, name) {
-    super(unicode, column, row, color, name)
-    this.possibleSpaces = 7
+    super(unicode, column, row, color, name, 7)
     this.moves = [
     [-1, -1],
     [1, -1],
@@ -54,8 +47,7 @@ class Queen extends Piece {
 }
 class Rook extends Piece {
   constructor (unicode, column, row, color, name) {
-    super(unicode, column, row, color, name)
-    this.possibleSpaces = 7
+    super(unicode, column, row, color, name, 7)
     this.moves = [
     [0, 1],
     [0, -1],
@@ -67,8 +59,7 @@ class Rook extends Piece {
 
 class Bishop extends Piece {
   constructor (unicode, column, row, color, name) {
-    super(unicode, column, row, color, name)
-    this.possibleSpaces = 7
+    super(unicode, column, row, color, name, 7)
     this.moves = [
     [-1, -1],
     [1, -1],
@@ -79,8 +70,7 @@ class Bishop extends Piece {
 }
 class Knight extends Piece {
   constructor (unicode, column, row, color, name) {
-    super(unicode, column, row, color, name)
-    this.possibleSpaces = 7
+    super(unicode, column, row, color, name, 1)
     this.moves = [
     [-1, -2],
     [1, -2],
@@ -95,15 +85,13 @@ class Knight extends Piece {
 }
 class PawnWhite extends Piece {
   constructor (unicode, column, row, color, name) {
-    super(unicode, column, row, color, name)
-    this.possibleSpaces = 1
+    super(unicode, column, row, color, name, 1)
     this.moves = [[0, -1]]
   }
 }
 class PawnBlack extends Piece {
   constructor (unicode, column, row, color, name) {
-    super(unicode, column, row, color, name)
-    this.possibleSpaces = 1
+    super(unicode, column, row, color, name, 1)
     this.moves = [[0, 1]]
   }
 }
