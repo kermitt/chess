@@ -1,3 +1,4 @@
+
 /*
 function snapto (piece, x, y) {
   board.findClosestLegalCell(x, y, size)
