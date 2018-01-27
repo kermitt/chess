@@ -11,6 +11,7 @@ class Piece {
     this.type = ''
     this.num = ''
     this.key = ''
+    this.couldEnPassant = false
   }
   addMoveCount () {
     this.moveCount++
@@ -229,6 +230,19 @@ class Moves {
     }
     return result
   }
+
+  getPawnAttack (color, moveCount) {
+    let moves = []
+    if (color == 'BLACK') {
+      moves.push([-1, 1, 1])
+      moves.push([1, 1, 1])
+    } else if (color === 'WHITE') {
+      moves.push([-1, -1, 1])
+      moves.push([1, -1, 1])
+    }
+    return moves
+  }
+
   getPossibleMoves (key, moveCount) {
     let ary = key.split('_')
     let color = ary[0]

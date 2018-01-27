@@ -23,7 +23,7 @@ class DisplayLogic {
 
   static findPossibleMoves (p) {
     board.zeroOutInfluences()
-
+    // log(JSON.stringify(p, null, 6))
     let pieces_whichCell_whichColor = {}
     for (let key in pieces.pieces) {
       let blackOrWhite = pieces.pieces[key].color
@@ -37,6 +37,7 @@ class DisplayLogic {
       let rowMovement = tuple[1]
       let possibleMoveCount = tuple[2]
 //      this.influence(p.color, col_row[0], col_row[1], tuple[0], tuple[1], pieces_whichCell_whichColor)
+
       this.influence(p.color, col_row[0], col_row[1], columnMovement, rowMovement, pieces_whichCell_whichColor, possibleMoveCount, 0)
     })
     LoL_influences.forEach(potential_col_row => {
