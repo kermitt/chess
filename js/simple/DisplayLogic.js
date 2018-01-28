@@ -1,8 +1,40 @@
 
-/*
+  /*
+  findClosestLegalCell (currentX, currentY, horizon) {
+    let closestCellId = ''
+    let current = 999999
+    this.board.forEach((row) => {
+      row.forEach((cell) => {
+        if (cell.isInfluenced == true) {
+          let x = cell.cx - currentX
+          let y = cell.cy - currentY
+          let distance = Math.sqrt((x * x) + (y * y))
+          if (distance < current) {
+            current = distance
+            closestCellId = cell.id
+          }
+        }
+      })
+    })
+
+    if (current < horizon) {
+      return closestCellId
+    }
+    return ''
+  }
+  */
+
 function snapto (piece, x, y) {
-  board.findClosestLegalCell(x, y, size)
-  let cellId = board.findClosestLegalCell(x, y, size)
+  board.findClosestLegalCell(x, y)
+  let cell = board.findClosestLegalCell(x, y)
+  piece.x = cell.px
+  piece.y = cell.py
+
+  d3.select('#' + piece.id)
+    .data([{'x': piece.x, 'y': piece.y}])
+    .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
+
+  /*
   if (cellId.length > 0) {
     // Snap to the new cell!
     isAttacked = board.getIsAttacked(cellId)
@@ -24,8 +56,8 @@ function snapto (piece, x, y) {
     .data([{'x': piece.x, 'y': piece.y}])
     .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
   }
+  */
 }
-*/
 
 let drag = d3.behavior.drag()
     .on('drag', function (d, i) {
@@ -34,13 +66,13 @@ let drag = d3.behavior.drag()
       d3.select(this).attr('transform', function (d, i) { return 'translate(' + [d.x, d.y] + ')' })
     })
     .on('dragstart', function (d, i) {
-      // let piece = pieces.pieces[this.id]
-      // DisplayLogic.findPossibleMoves(piece)
-      // toggleInfluenceDisplay()
+      let piece = pieces[this.id]
+      MoveLogic.findPossibleMoves(piece)
+     // toggleInfluenceDisplay()
     })
     .on('dragend', function (d, i) {
-      // let piece = pieces.pieces[this.id]
-      // snapto(piece, d.x, d.y)
+      let piece = pieces[this.id]
+      snapto(piece, d.x, d.y)
       // board.zeroOutInfluences()
       // toggleInfluenceDisplay()
     })
@@ -83,7 +115,7 @@ function addCell (cell) {
         .attr('fill', '#000')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
-        /*
+/*
   down += 30
   // x
   c.append('svg:text')
@@ -107,7 +139,7 @@ function addCell (cell) {
         .attr('fill', '#000')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
-
+*/
         // COLUMN
   down += 30
 
@@ -133,8 +165,6 @@ function addCell (cell) {
         .attr('fill', '#000')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
-
-        */
 }
 
 /*
@@ -159,10 +189,11 @@ function addPieceIntoDom (piece, size) {
         .append('svg:g')
         .data([{
           'x': piece.x,
-          'y': piece.y
+          'y': piece.y,
+          'id': piece.id
         }]) // needed for dragging
         .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
-        .attr('id', piece.key)
+        .attr('id', piece.id)
         .call(drag)
 
   let background = p.append('svg:circle')
