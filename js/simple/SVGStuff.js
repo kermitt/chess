@@ -9,58 +9,17 @@ function svg_toggleInfluenceDisplay () {
 }
 
 function svg_zerooutInfluence () {
-  /*
-  board.board.forEach((row) => {
-    row.forEach((cell) => {
-      d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
-      d3.select('#' + cell.id).classed('attackable', cell.isAttacked)
-      d3.select('#' + cell.id).classed('supported', cell.isSupported)
-    })
-  })
-  */
-  console.log('ONE! ')
-
   for (let id in board.cells) {
-    let cell = board.cells[id]
-    cell.isInfluenced = false
-    cell.isAttacked = false
-    cell.isSupported = false
-    d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
-    d3.select('#' + cell.id).classed('attackable', cell.isAttacked)
-    d3.select('#' + cell.id).classed('supported', cell.isSupported)
+    board.cells[id].isInfluenced = false
+    board.cells[id].isAttacked = false
+    board.cells[id].isSupported = false
+    d3.select('#' + id).classed('influenced', false)
+    d3.select('#' + id).classed('attackable', false)
+    d3.select('#' + id).classed('supported', false)
   }
 }
 
-function influence (pieceColor, col, row, vectorY, vectorX, pieces_whichCell_whichColor, possibleMoveCount, currentMoveCount) {
-  currentMoveCount++
-  if (currentMoveCount <= possibleMoveCount) {
-    let potential = board.board[col][row]
-    if (potential != undefined) {
-      let c = col + vectorY
-      let r = row + vectorX
-      if (c < 8 && c >= 0 && r < 8 && r >= 0) {
-        let cellId = 'cr_' + c + '_' + r
-        let hit = pieces_whichCell_whichColor.hasOwnProperty(cellId)
-        if (hit === true) {
-          let otherPieceColor = pieces_whichCell_whichColor[cellId]
-          if (pieceColor != otherPieceColor) {
-            board.setIsAttacked(c, r)
-            board.setInfluenced(c, r)
-          } else {
-            board.setIsSupported(c, r)
-          }
-        } else {
-          board.setInfluenced(c, r)
-        }
-        if (!pieces_whichCell_whichColor.hasOwnProperty(cellId)) {
-          this.influence(pieceColor, c, r, vectorY, vectorX, pieces_whichCell_whichColor, possibleMoveCount, currentMoveCount)
-        }
-      }
-    }
-  }
-}
-
-function paintInfluence (piece) {
+function svg_paintInfluence (piece) {
   let n = piece.getTravel()
   let r = piece.row
   let c = piece.column
@@ -75,14 +34,15 @@ function paintInfluence (piece) {
         let cid = getCellId_fromColumnAndRow(col, row)
         let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
         if (pid == undefined) {
-          console.log('No. It does not.')
           board.cells[cid].isInfluenced = true
           d3.select('#' + cid).classed('influenced', board.cells[cid].isInfluenced)
         } else {
           if (pieces[pid].color == piece.color) {
+            notBlocked = false
             board.cells[cid].isSupported = true
             d3.select('#' + cid).classed('supported', board.cells[cid].isSupported)
           } else {
+            notBlocked = false
             board.cells[cid].isAttacked = true
             d3.select('#' + cid).classed('attackable', board.cells[cid].isAttacked)
           }
@@ -92,22 +52,45 @@ function paintInfluence (piece) {
   })
 }
 
+function svg_killPiece_and_place_into_the_deadpieces_bin (cell) {
+  console.log(JSON.stringify(cell))
+  let pieceId = cell.pieceId
+  let unicode = pieces[pieceId].unicode
+  console.log('REMOVE kill pieceId: ' + pieceId + '  unicode: ' + unicode)
+  d3.select('#' + pieceId).remove()
+
+  document.getElementById('deadpieces').innerHTML += unicode + '<br/>'
+}
+
 function svg_snapto (piece, mouseX, mouseY) {
   let cell = board.findClosestLegalCell(mouseX, mouseY)
+
+  let origCellId = getCellId_fromColumnAndRow(piece.column, piece.row)
+  let origCell = board.cells[origCellId]
+
   if (cell.isAttacked || cell.isInfluenced) {
     piece.x = cell.px
     piece.y = cell.py
     piece.row = cell.row
     piece.column = cell.column
+    origCell.removePiece()
+
+    if (cell.isAttacked) {
+      svg_killPiece_and_place_into_the_deadpieces_bin(cell)
+    }
+
+    cell.setPiece(piece)
   } else {
     let origCellId = getCellId_fromColumnAndRow(piece.column, piece.row)
-    piece.x = board.cells[origCellId].px
-    piece.y = board.cells[origCellId].py
+    piece.x = origCell.px
+    piece.y = origCell.py
   }
 
   d3.select('#' + piece.id)
     .data([{'x': piece.x, 'y': piece.y}])
     .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
+
+  svg_zerooutInfluence()
 }
 
 let svg_drag = d3.behavior.drag()
@@ -118,8 +101,7 @@ let svg_drag = d3.behavior.drag()
     })
     .on('dragstart', function (d, i) {
       let piece = pieces[this.id]
-
-      paintInfluence(piece)
+      svg_paintInfluence(piece)
     })
     .on('dragend', function (d, i) {
       let piece = pieces[this.id]
@@ -139,8 +121,8 @@ function svg_addCell (cell) {
         .attr('width', SIZE)
         .attr('height', SIZE)
 
-        /// / TODO: REMOVE THE BELOW TEXT
-
+/// / TODO: REMOVE THE BELOW TEXT
+/*
   let down = -40
   // id
   c.append('svg:text')
@@ -175,6 +157,7 @@ function svg_addCell (cell) {
         .attr('fill', '#000')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
+*/
 }
 
 function svg_addPieceIntoDom (piece, size) {

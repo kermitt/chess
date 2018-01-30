@@ -65,7 +65,7 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     <a href="https://github.com/kermitt/chess/tree/simple" class="forHumans">https://github.com/kermitt/chess/tree/simple</a>
 
   </td>
-  <td id='spacer'></td> 
+  <td  valign='top'><div id='deadpieces'> </div></td> 
   <td valign='top'>
     <button class='forHumans' onclick='todo("TODO: import chess PGN file!");'>Import PGN</button>
     <hr>
@@ -89,7 +89,6 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 <script type="text/javascript" src="js/simple/ConfigAndGlobals.js"></script>
 <script type="text/javascript" src="js/simple/Cell.js"></script>
 <script type="text/javascript" src="js/simple/Pieces.js"></script>
-<!-- <script type="text/javascript" src="js/simple/MoveLogic.js"></script> -->
 <script type="text/javascript" src="js/simple/SVGStuff.js"></script>
 <script type="text/javascript" src="js/simple/Board.js"></script>
 
@@ -97,26 +96,19 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 <script>
 setTheSizeForTheBoard(800) // TODO: By dynamic
 let board = new Board()
-/*
-board.board.forEach((row) => {
-  row.forEach((cell)=> {
-    svg_addCell(cell)
-  })
-})
-*/
+
 for ( let id in board.cells ) {
   svg_addCell(board.cells[id])
 }
 
 for ( let key in pieces ) {
   let piece = pieces[key]
-  //let cell = board.getCell( piece.column, piece.row)
   let id = getCellId_fromColumnAndRow( piece.column, piece.row)
   let cell = board.cells[id]
   piece.x = cell.px
   piece.y = cell.py
   cell.setPiece(piece)
-//  svg_addPieceIntoDom(piece)
+  svg_addPieceIntoDom(piece)
 
 }
 
