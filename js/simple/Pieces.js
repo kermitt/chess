@@ -1,17 +1,22 @@
 class Piece {
-  constructor (unicode, column, row, color, id, name, possibleSpaces) {
+  constructor (unicode, column, row, color, id, name, travel) {
     this.unicode = unicode // diplay
     this.column = column // col
     this.row = row // row
     this.color = color // side
     this.name = name // name
     this.moveCount = 0 // this will be important for Castling and En-passant... and, hopefully, for analytics
-    this.possibleSpaces = possibleSpaces// # possible spaces - this will get weird for pawns
-
+    this.travel = travel// # possible spaces - this will get weird for pawns
     this.id = id
   }
   getColRow_currentCell () {
     return {c: this.column, r: this.row, cellId: getCellId_fromColumnAndRow(this.column, this.row), pieceId: this.id}
+  }
+  getTravel () {
+    return this.travel
+  }
+  getMoves () {
+    return this.moves
   }
 }
 
@@ -94,6 +99,14 @@ class PawnBlack extends Piece {
     super(unicode, column, row, color, id, name, 1)
     this.moves = [[0, 1]]
   }
+
+  getPossibleMovesCount () {
+    if (this.moveCount == 0) {
+      return 2
+    } else {
+      return 1
+    }
+  }
 }
 // + --------------------------------------------------------------------------+
 let pieces = {}
@@ -116,8 +129,8 @@ pieces['bb2'] = new Bishop('\u265D', 5, 0, BLACK, 'bb2', 'black_bishop_kingside'
     //
 pieces['wk1'] = new Knight('\u2658', 1, 7, WHITE, 'wk1', 'white_knight_queenside')
 pieces['wk2'] = new Knight('\u2658', 6, 7, WHITE, 'wk2', 'white_knight_kingside')
-pieces['bk1'] = new Knight('\u265D', 1, 0, BLACK, 'bk1', 'black_knight_queenside')
-pieces['bk2'] = new Knight('\u265D', 6, 0, BLACK, 'bk2', 'black_knight_kingside')
+pieces['bk1'] = new Knight('\u265E', 1, 0, BLACK, 'bk1', 'black_knight_queenside')
+pieces['bk2'] = new Knight('\u265E', 6, 0, BLACK, 'bk2', 'black_knight_kingside')
     //
 pieces['wp1'] = new PawnWhite('\u2659', 0, 6, WHITE, 'wp1', 'white_pawn_1')
 pieces['wp2'] = new PawnWhite('\u2659', 1, 6, WHITE, 'wp2', 'white_pawn_2')

@@ -87,27 +87,37 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 </script>
 <script type="text/javascript" src="js/simple/ConfigAndGlobals.js"></script>
+<script type="text/javascript" src="js/simple/Cell.js"></script>
 <script type="text/javascript" src="js/simple/Pieces.js"></script>
-<script type="text/javascript" src="js/simple/MoveLogic.js"></script>
-<script type="text/javascript" src="js/simple/DisplayLogic.js"></script>
+<!-- <script type="text/javascript" src="js/simple/MoveLogic.js"></script> -->
+<script type="text/javascript" src="js/simple/SVGStuff.js"></script>
 <script type="text/javascript" src="js/simple/Board.js"></script>
 
 
 <script>
 setTheSizeForTheBoard(800) // TODO: By dynamic
 let board = new Board()
+/*
 board.board.forEach((row) => {
   row.forEach((cell)=> {
-    addCell(cell)
+    svg_addCell(cell)
   })
 })
+*/
+for ( let id in board.cells ) {
+  svg_addCell(board.cells[id])
+}
 
 for ( let key in pieces ) {
   let piece = pieces[key]
-  let cell = board.getCell( piece.column, piece.row)
+  //let cell = board.getCell( piece.column, piece.row)
+  let id = getCellId_fromColumnAndRow( piece.column, piece.row)
+  let cell = board.cells[id]
   piece.x = cell.px
   piece.y = cell.py
-  addPieceIntoDom(piece)
+  cell.setPiece(piece)
+//  svg_addPieceIntoDom(piece)
+
 }
 
 

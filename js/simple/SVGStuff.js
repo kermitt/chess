@@ -1,5 +1,15 @@
 
 function svg_toggleInfluenceDisplay () {
+  for (let id in board.cells) {
+    let cell = board.cells[id]
+    d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
+    d3.select('#' + cell.id).classed('attackable', cell.isAttacked)
+    d3.select('#' + cell.id).classed('supported', cell.isSupported)
+  }
+}
+
+function svg_zerooutInfluence () {
+  /*
   board.board.forEach((row) => {
     row.forEach((cell) => {
       d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
@@ -7,14 +17,93 @@ function svg_toggleInfluenceDisplay () {
       d3.select('#' + cell.id).classed('supported', cell.isSupported)
     })
   })
+  */
+  console.log('ONE! ')
+
+  for (let id in board.cells) {
+    let cell = board.cells[id]
+    cell.isInfluenced = false
+    cell.isAttacked = false
+    cell.isSupported = false
+    d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
+    d3.select('#' + cell.id).classed('attackable', cell.isAttacked)
+    d3.select('#' + cell.id).classed('supported', cell.isSupported)
+  }
 }
 
-function svg_snapto (piece, x, y) {
-  svg_toggleInfluenceDisplay()
-  board.findClosestLegalCell(x, y)
-  let cell = board.findClosestLegalCell(x, y)
-  piece.x = cell.px
-  piece.y = cell.py
+function influence (pieceColor, col, row, vectorY, vectorX, pieces_whichCell_whichColor, possibleMoveCount, currentMoveCount) {
+  currentMoveCount++
+  if (currentMoveCount <= possibleMoveCount) {
+    let potential = board.board[col][row]
+    if (potential != undefined) {
+      let c = col + vectorY
+      let r = row + vectorX
+      if (c < 8 && c >= 0 && r < 8 && r >= 0) {
+        let cellId = 'cr_' + c + '_' + r
+        let hit = pieces_whichCell_whichColor.hasOwnProperty(cellId)
+        if (hit === true) {
+          let otherPieceColor = pieces_whichCell_whichColor[cellId]
+          if (pieceColor != otherPieceColor) {
+            board.setIsAttacked(c, r)
+            board.setInfluenced(c, r)
+          } else {
+            board.setIsSupported(c, r)
+          }
+        } else {
+          board.setInfluenced(c, r)
+        }
+        if (!pieces_whichCell_whichColor.hasOwnProperty(cellId)) {
+          this.influence(pieceColor, c, r, vectorY, vectorX, pieces_whichCell_whichColor, possibleMoveCount, currentMoveCount)
+        }
+      }
+    }
+  }
+}
+
+function paintInfluence (piece) {
+  let n = piece.getTravel()
+  let r = piece.row
+  let c = piece.column
+  piece.moves.forEach((possible, i) => {
+    let col = c
+    let row = r
+    let notBlocked = true
+    for (let j = 0; j < n; j++) {
+      col += possible[0]
+      row += possible[1]
+      if (col >= 0 && row >= 0 && col <= 7 && row <= 7 && notBlocked) {
+        let cid = getCellId_fromColumnAndRow(col, row)
+        let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+        if (pid == undefined) {
+          console.log('No. It does not.')
+          board.cells[cid].isInfluenced = true
+          d3.select('#' + cid).classed('influenced', board.cells[cid].isInfluenced)
+        } else {
+          if (pieces[pid].color == piece.color) {
+            board.cells[cid].isSupported = true
+            d3.select('#' + cid).classed('supported', board.cells[cid].isSupported)
+          } else {
+            board.cells[cid].isAttacked = true
+            d3.select('#' + cid).classed('attackable', board.cells[cid].isAttacked)
+          }
+        }
+      }
+    }
+  })
+}
+
+function svg_snapto (piece, mouseX, mouseY) {
+  let cell = board.findClosestLegalCell(mouseX, mouseY)
+  if (cell.isAttacked || cell.isInfluenced) {
+    piece.x = cell.px
+    piece.y = cell.py
+    piece.row = cell.row
+    piece.column = cell.column
+  } else {
+    let origCellId = getCellId_fromColumnAndRow(piece.column, piece.row)
+    piece.x = board.cells[origCellId].px
+    piece.y = board.cells[origCellId].py
+  }
 
   d3.select('#' + piece.id)
     .data([{'x': piece.x, 'y': piece.y}])
@@ -29,18 +118,12 @@ let svg_drag = d3.behavior.drag()
     })
     .on('dragstart', function (d, i) {
       let piece = pieces[this.id]
-      // svg_findPossibleMoves(piece)
-      // for ( let i = 0 ; i < piece.possibleSpaces; i++ ) {
 
-      let gpmc = piece.getPossibleMovesCount()
-      let gpm = piece.getPossibleMoves()
-      console.log(gpmc + ' and ' + gpm)
+      paintInfluence(piece)
     })
     .on('dragend', function (d, i) {
       let piece = pieces[this.id]
       svg_snapto(piece, d.x, d.y)
-      // board.zeroOutInfluences()
-      // toggleInfluenceDisplay()
     })
 
 function svg_addCell (cell) {
@@ -69,11 +152,10 @@ function svg_addCell (cell) {
         .attr('fill', '#000')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
-/*
   down += 30
-  // x
+
   c.append('svg:text')
-        .text('x: ' + cell.x)
+        .text('c: ' + cell.column)
         .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
         .attr('text-anchor', 'right')
           .attr('font-weight', 700)
@@ -82,32 +164,6 @@ function svg_addCell (cell) {
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
 
-  down += 30
-    // y
-  c.append('svg:text')
-        .text('y: ' + cell.y)
-        .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
-        .attr('text-anchor', 'right')
-          .attr('font-weight', 700)
-          .attr('font-family', 'Helvetica')
-        .attr('fill', '#000')
-        .attr('stroke', 'none')
-        .attr('pointer-events', 'none')
-*/
-        // COLUMN
-  down += 30
-
-  c.append('svg:text')
-        .text('c: ' + cell.col)
-        .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
-        .attr('text-anchor', 'right')
-          .attr('font-weight', 700)
-          .attr('font-family', 'Helvetica')
-        .attr('fill', '#000')
-        .attr('stroke', 'none')
-        .attr('pointer-events', 'none')
-
-        // ROW
   down += 30
 
   c.append('svg:text')
@@ -122,8 +178,6 @@ function svg_addCell (cell) {
 }
 
 function svg_addPieceIntoDom (piece, size) {
-  // console.log(JSON.stringify(piece, null, 6) + ' \n ***** ')
-
   let r = SIZE / 3
   let p = d3.select('#chessboard')
         .append('svg:g')
@@ -135,6 +189,9 @@ function svg_addPieceIntoDom (piece, size) {
         .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
         .attr('id', piece.id)
         .call(svg_drag)
+        .on('click', function () {
+          console.log('CLICK!')
+        })
 
   let background = p.append('svg:circle')
         .attr('fill-opacity', 0.1)
