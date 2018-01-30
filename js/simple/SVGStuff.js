@@ -34,6 +34,7 @@ function svg_paintInfluence (piece) {
         board.cells[cid].isSupported = true
         d3.select('#' + cid).classed('supported', board.cells[cid].isSupported)
       }
+      console.log(key + '   ' + attacks[key])
     }
 
     for (let key in moves) {

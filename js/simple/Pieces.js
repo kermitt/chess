@@ -93,12 +93,26 @@ class PawnWhite extends Piece {
     super(unicode, column, row, color, id, name, 1)
     this.lastMoveWas2Spaces = false
   }
+  getPossiblePawnMoves () {
+    return getPossiblePawnMoves_white(this.column, this.row, this.moveCount)
+  }
+  getPossiblePawnAttackMoves () {
+    return getPossiblePawnAttackMoves_white(this.column, this.row, this.color)
+  }
 }
 class PawnBlack extends Piece {
   constructor (unicode, column, row, color, id, name) {
     super(unicode, column, row, color, id, name, 1)
     this.lastMoveWas2Spaces = false
   }
+
+  getPossiblePawnMoves () {
+    return getPossiblePawnMoves_black(this.column, this.row, this.moveCount)
+  }
+  getPossiblePawnAttackMoves () {
+    return getPossiblePawnAttackMoves_black(this.column, this.row, this.color)
+  }
+/*
 
   getPossiblePawnMoves () {
     let movements = {}
@@ -116,11 +130,9 @@ class PawnBlack extends Piece {
       let cid = getCellId_fromColumnAndRow(this.column, this.row + 2)
       let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
       if (pid == undefined) {
-        movements['move2'] = [this.column, this.row + 2]
+        movements[PAWN_JUMPED_2_SPACES] = [this.column, this.row + 2]
       }
     }
-
-    console.log(JSON.stringify(movements))
 
     return movements
   }
@@ -134,15 +146,15 @@ class PawnBlack extends Piece {
 
     // left side
     if (isOnTheBoard(candidateCol1, this.row + 1)) {
-      let cid = getCellId_fromColumnAndRow(candidateCol1, this.row + 1)
+      let cid = getCellId_fromColumnAndRow(this.column - 1, this.row + 1)
       let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
       if (pid == undefined) {
         // do nothing
       } else {
         if (pieces[pid].color != this.color) {
-          attacks['left_attack'] = [candidateCol1, this.row + 1]
+          attacks['left_attack'] = [this.column - 1, this.row + 1]
         } else {
-          attacks['left_support'] = [candidateCol1, this.row + 1]
+          attacks['left_support'] = [this.column - 1, this.row + 1]
         }
       }
     }
@@ -154,9 +166,9 @@ class PawnBlack extends Piece {
         // do nothing
       } else {
         if (pieces[pid].color != this.color) {
-          attacks['right_attack'] = [candidateCol1, this.row + 1]
+          attacks['right_attack'] = [this.column + 1, this.row + 1]
         } else {
-          attacks['right_support'] = [candidateCol1, this.row + 1]
+          attacks['right_support'] = [this.column + 1, this.row + 1]
         }
       }
     }
@@ -195,7 +207,7 @@ class PawnBlack extends Piece {
             if (cid2 == undefined) { // Yes, the cell is vacant
               // Empty cell! It is possible to move here
               if (pieces[pid].lastMoveWas2Spaces) { // Was the last move that the target pawn made a two move thing?
-                attacks['right_attack_enpassant'] = [this.column - 1, this.row + 1]
+                attacks['right_attack_enpassant'] = [this.column + 1, this.row + 1]
               }
             }
           }
@@ -204,6 +216,7 @@ class PawnBlack extends Piece {
     }
     return attacks
   }
+  */
 }
 
 // + --------------------------------------------------------------------------+
