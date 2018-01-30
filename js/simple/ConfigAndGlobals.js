@@ -17,3 +17,9 @@ function getCellId_fromColumnAndRow (c, r) {
   let id = LETTERS[c] + flipflop // now, the id will be something like 'a6'
   return id
 }
+
+function isOnTheBoard (column, row) {
+  // often need to know if a possible column/row combo is a legal one of not
+  let isOk = column >= 0 && row >= 0 && column <= 7 && row <= 7
+  return isOk
+}

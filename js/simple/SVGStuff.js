@@ -1,13 +1,4 @@
 
-function svg_toggleInfluenceDisplay () {
-  for (let id in board.cells) {
-    let cell = board.cells[id]
-    d3.select('#' + cell.id).classed('influenced', cell.isInfluenced)
-    d3.select('#' + cell.id).classed('attackable', cell.isAttacked)
-    d3.select('#' + cell.id).classed('supported', cell.isSupported)
-  }
-}
-
 function svg_zerooutInfluence () {
   for (let id in board.cells) {
     board.cells[id].isInfluenced = false
@@ -23,40 +14,70 @@ function svg_paintInfluence (piece) {
   let n = piece.getTravel()
   let r = piece.row
   let c = piece.column
-  piece.moves.forEach((possible, i) => {
-    let col = c
-    let row = r
-    let notBlocked = true
-    for (let j = 0; j < n; j++) {
-      col += possible[0]
-      row += possible[1]
-      if (col >= 0 && row >= 0 && col <= 7 && row <= 7 && notBlocked) {
-        let cid = getCellId_fromColumnAndRow(col, row)
-        let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-        if (pid == undefined) {
-          board.cells[cid].isInfluenced = true
-          d3.select('#' + cid).classed('influenced', board.cells[cid].isInfluenced)
-        } else {
-          if (pieces[pid].color == piece.color) {
-            notBlocked = false
-            board.cells[cid].isSupported = true
-            d3.select('#' + cid).classed('supported', board.cells[cid].isSupported)
+
+  if (piece.name.includes('pawn')) {
+    // pawns are tricksy
+    let attacks = piece.getPossiblePawnAttackMoves()
+    let moves = piece.getPossiblePawnMoves()
+
+    for (let key in attacks) {
+      let ary = attacks[key]
+      let col = ary[0]
+      let row = ary[1]
+      let cid = getCellId_fromColumnAndRow(col, row)
+
+      console.log('col ' + col + ' row ' + row)
+      if (key.includes('attack')) {
+        board.cells[cid].isAttacked = true
+        d3.select('#' + cid).classed('attackable', board.cells[cid].isAttacked)
+      } else {
+        board.cells[cid].isSupported = true
+        d3.select('#' + cid).classed('supported', board.cells[cid].isSupported)
+      }
+    }
+
+    for (let key in moves) {
+      let ary = moves[key]
+      let col = ary[0]
+      let row = ary[1]
+      let cid = getCellId_fromColumnAndRow(col, row)
+      board.cells[cid].isInfluenced = true
+      d3.select('#' + cid).classed('influenced', board.cells[cid].isInfluenced)
+    }
+  } else {
+    piece.moves.forEach((possible, i) => {
+      let col = c
+      let row = r
+      let notBlocked = true
+      for (let j = 0; j < n; j++) {
+        col += possible[0]
+        row += possible[1]
+        if (isOnTheBoard(col, row) && notBlocked) {
+          let cid = getCellId_fromColumnAndRow(col, row)
+          let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+          if (pid == undefined) {
+            board.cells[cid].isInfluenced = true
+            d3.select('#' + cid).classed('influenced', board.cells[cid].isInfluenced)
           } else {
-            notBlocked = false
-            board.cells[cid].isAttacked = true
-            d3.select('#' + cid).classed('attackable', board.cells[cid].isAttacked)
+            if (pieces[pid].color == piece.color) {
+              notBlocked = false
+              board.cells[cid].isSupported = true
+              d3.select('#' + cid).classed('supported', board.cells[cid].isSupported)
+            } else {
+              notBlocked = false
+              board.cells[cid].isAttacked = true
+              d3.select('#' + cid).classed('attackable', board.cells[cid].isAttacked)
+            }
           }
         }
       }
-    }
-  })
+    })
+  }
 }
 
 function svg_killPiece_and_place_into_the_deadpieces_bin (cell) {
-  console.log(JSON.stringify(cell))
   let pieceId = cell.pieceId
   let unicode = pieces[pieceId].unicode
-  console.log('REMOVE kill pieceId: ' + pieceId + '  unicode: ' + unicode)
   d3.select('#' + pieceId).remove()
 
   document.getElementById('deadpieces').innerHTML += unicode + '<br/>'
@@ -78,8 +99,8 @@ function svg_snapto (piece, mouseX, mouseY) {
     if (cell.isAttacked) {
       svg_killPiece_and_place_into_the_deadpieces_bin(cell)
     }
-
     cell.setPiece(piece)
+    piece.moveCount++
   } else {
     let origCellId = getCellId_fromColumnAndRow(piece.column, piece.row)
     piece.x = origCell.px
@@ -122,11 +143,11 @@ function svg_addCell (cell) {
         .attr('height', SIZE)
 
 /// / TODO: REMOVE THE BELOW TEXT
-/*
+
   let down = -40
   // id
   c.append('svg:text')
-        .text('id: ' + cell.id)
+        .text(cell.id)
         .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
         .attr('text-anchor', 'right')
         .attr('font-weight', 700)
@@ -157,7 +178,6 @@ function svg_addCell (cell) {
         .attr('fill', '#000')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none')
-*/
 }
 
 function svg_addPieceIntoDom (piece, size) {
@@ -172,9 +192,6 @@ function svg_addPieceIntoDom (piece, size) {
         .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
         .attr('id', piece.id)
         .call(svg_drag)
-        .on('click', function () {
-          console.log('CLICK!')
-        })
 
   let background = p.append('svg:circle')
         .attr('fill-opacity', 0.1)
@@ -195,8 +212,6 @@ function svg_addPieceIntoDom (piece, size) {
 }
 
 function svg_addPieceIntoDom (piece, size) {
-  // console.log(JSON.stringify(piece, null, 6) + ' \n ***** ')
-
   let r = SIZE / 3
   let p = d3.select('#chessboard')
         .append('svg:g')

@@ -91,23 +91,121 @@ class Knight extends Piece {
 class PawnWhite extends Piece {
   constructor (unicode, column, row, color, id, name) {
     super(unicode, column, row, color, id, name, 1)
-    this.moves = [[0, -1]]
+    this.lastMoveWas2Spaces = false
   }
 }
 class PawnBlack extends Piece {
   constructor (unicode, column, row, color, id, name) {
     super(unicode, column, row, color, id, name, 1)
-    this.moves = [[0, 1]]
+    this.lastMoveWas2Spaces = false
   }
 
-  getPossibleMovesCount () {
-    if (this.moveCount == 0) {
-      return 2
-    } else {
-      return 1
+  getPossiblePawnMoves () {
+    let movements = {}
+    // forward 1
+    if (isOnTheBoard(this.column, this.row + 1)) {
+      let cid = getCellId_fromColumnAndRow(this.column, this.row + 1)
+      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+      if (pid == undefined) {
+        movements['move1'] = [this.column, this.row + 1]
+      }
     }
+
+    // forward 2
+    if (isOnTheBoard(this.column, this.row + 2) && this.moveCount == 0) {
+      let cid = getCellId_fromColumnAndRow(this.column, this.row + 2)
+      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+      if (pid == undefined) {
+        movements['move2'] = [this.column, this.row + 2]
+      }
+    }
+
+    console.log(JSON.stringify(movements))
+
+    return movements
+  }
+
+  getPossiblePawnAttackMoves () {
+    let attacks = {}
+
+    let candidateRow = this.row + 1
+    let candidateCol1 = this.column - 1
+    let candidateCol2 = this.column + 1
+
+    // left side
+    if (isOnTheBoard(candidateCol1, this.row + 1)) {
+      let cid = getCellId_fromColumnAndRow(candidateCol1, this.row + 1)
+      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+      if (pid == undefined) {
+        // do nothing
+      } else {
+        if (pieces[pid].color != this.color) {
+          attacks['left_attack'] = [candidateCol1, this.row + 1]
+        } else {
+          attacks['left_support'] = [candidateCol1, this.row + 1]
+        }
+      }
+    }
+        // right side
+    if (isOnTheBoard(candidateCol1, this.row + 1)) {
+      let cid = getCellId_fromColumnAndRow(candidateCol1, this.row + 1)
+      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+      if (pid == undefined) {
+        // do nothing
+      } else {
+        if (pieces[pid].color != this.color) {
+          attacks['right_attack'] = [candidateCol1, this.row + 1]
+        } else {
+          attacks['right_support'] = [candidateCol1, this.row + 1]
+        }
+      }
+    }
+
+      // en passant ( left )
+    if (this.row == 4) { // Is this pawn in the correct row to launch an en passant attack?
+      let cid = getCellId_fromColumnAndRow(this.column - 1, this.row)
+      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+      if (pid == undefined) {
+        // do nothing
+      } else {
+        if (pieces[pid].color != this.color) { // Is an enemy?
+          if (pieces[pid].name.includes('pawn')) { // Is a pawn?
+            let cid2 = getCellId_fromColumnAndRow(this.column - 1, this.row + 1) // cell is vacant?
+            if (cid2 == undefined) { // Yes, the cell is vacant
+              // Empty cell! It is possible to move here
+              if (pieces[pid].lastMoveWas2Spaces) { // Was the last move that the target pawn made a two move thing?
+                attacks['left_attack_enpassant'] = [this.column - 1, this.row + 1]
+              }
+            }
+          }
+        }
+      }
+    }
+
+      // en passant ( right )
+    if (this.row == 4) { // Is this pawn in the correct row to launch an en passant attack?
+      let cid = getCellId_fromColumnAndRow(this.column + 1, this.row)
+      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
+      if (pid == undefined) {
+        // do nothing
+      } else {
+        if (pieces[pid].color != this.color) { // Is an enemy?
+          if (pieces[pid].name.includes('pawn')) { // Is a pawn?
+            let cid2 = getCellId_fromColumnAndRow(this.column + 1, this.row + 1) // cell is vacant?
+            if (cid2 == undefined) { // Yes, the cell is vacant
+              // Empty cell! It is possible to move here
+              if (pieces[pid].lastMoveWas2Spaces) { // Was the last move that the target pawn made a two move thing?
+                attacks['right_attack_enpassant'] = [this.column - 1, this.row + 1]
+              }
+            }
+          }
+        }
+      }
+    }
+    return attacks
   }
 }
+
 // + --------------------------------------------------------------------------+
 let pieces = {}
 
