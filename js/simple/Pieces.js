@@ -105,7 +105,7 @@ class PawnWhite extends Piece {
   sussPossiblePawnAttackMoves () {
     let adjustRow = -1 // Go up the board
     this.attacks = getPossibleAttacks(this.column, this.row, this.color, adjustRow)
-    this.kill_and_land = getPossibleEnpassantAttacks(this.column, this.row, this.color, adjustRow, 3)
+    this.kill_and_land = getPossibleEnpassantAttacks(this.column, this.row, this.color, adjustRow, 3, this.moveCount)
 
     // if (this.kill_and_land.length > 0) { console.log('WHITE: ' + JSON.stringify(this.kill_and_land, null, 6)) }
   }
@@ -131,7 +131,7 @@ class PawnBlack extends Piece {
   sussPossiblePawnAttackMoves () {
     let adjustRow = 1
     this.attacks = getPossibleAttacks(this.column, this.row, this.color, adjustRow)
-    this.kill_and_land = getPossibleEnpassantAttacks(this.column, this.row, this.color, adjustRow, 4)
+    this.kill_and_land = getPossibleEnpassantAttacks(this.column, this.row, this.color, adjustRow, 4, this.moveCount)
 
     // if (this.kill_and_land.length > 0) { console.log('BLACK: ' + JSON.stringify(this.kill_and_land, null, 6)) }
   }

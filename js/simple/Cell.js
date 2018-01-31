@@ -15,7 +15,6 @@ class Cell {
     this.isEnpassant = false
   }
   setPiece (piece) {
-//    this.removePiece()
     this.pieceId = piece.id
   }
   removePiece () {

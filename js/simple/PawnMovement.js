@@ -34,7 +34,7 @@ function getPossibleAttacks (c, r, color, adjustRow) {
   return HoL
 }
 
-function getPossibleEnpassantAttacks (c, r, color, adjustRow, correctRowToDoEnpassant) {
+function getPossibleEnpassantAttacks (c, r, color, adjustRow, correctRowToDoEnpassant, moveCount_ofPiece) {
   let kill_and_land = []
 
   if (r == correctRowToDoEnpassant) {
@@ -42,13 +42,15 @@ function getPossibleEnpassantAttacks (c, r, color, adjustRow, correctRowToDoEnpa
       let adjustColumn = i == 0 ? -1 : 1
       let col = c + adjustColumn
       let row = r
-//      console.log(' col ' + col + ' row ' + row)
       if (isOnTheBoard(col, row)) {
         let cell_to_kill = getCellId_fromColumnAndRow(col, row)
         let pid = board.cells[cell_to_kill].getPieceId()
 
         if (pid != undefined) {
           let p = pieces[pid]
+
+          console.log('board.moveCount: ' + board.moveCount + ' p.moveCount ' + p.moveCount + ' protag move ' + moveCount_ofPiece)
+
           if (p.name.includes('pawn') && p.color != color && p.moveCount == 1) {
             // It is an enemy pawn next to us AND its only move so far has been to 'jump 2' spaces
             // Now, is the cell 'behind' it also empty?

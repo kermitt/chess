@@ -1,5 +1,6 @@
 class Board {
   constructor () {
+    this.moveCount = 0
     this.cells = {}
     const OFFSET_FOR_POSITIONING_THE_PIECES_CORRECTLY = SIZE / 2
     let j = 0

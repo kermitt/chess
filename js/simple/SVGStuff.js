@@ -84,6 +84,7 @@ function svg_snapto_forPawn (pawn, mouseX, mouseY) {
 
     cell.setPiece(pawn)
     pawn.moveCount++
+    board.moveCount++
     pawn.reset()
   } else {
     let origCellId = getCellId_fromColumnAndRow(pawn.column, pawn.row)
@@ -161,6 +162,7 @@ function svg_snapto (piece, mouseX, mouseY) {
     }
     cell.setPiece(piece)
     piece.moveCount++
+    board.moveCount++
   } else {
     let origCellId = getCellId_fromColumnAndRow(piece.column, piece.row)
     piece.x = origCell.px
