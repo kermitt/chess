@@ -12,6 +12,7 @@ class Cell {
     this.isInfluenced = false
     this.isAttacked = false
     this.isSupported = false
+    this.isEnpassant = false
   }
   setPiece (piece) {
 //    this.removePiece()

@@ -15,9 +15,6 @@ class Piece {
   getTravel () {
     return this.travel
   }
-  getMoves () {
-    return this.moves
-  }
 }
 
 class King extends Piece {
@@ -91,134 +88,81 @@ class Knight extends Piece {
 class PawnWhite extends Piece {
   constructor (unicode, column, row, color, id, name) {
     super(unicode, column, row, color, id, name, 1)
-    this.lastMoveWas2Spaces = false
+    this.moves = {}
+    this.attacks = {}
+    this.kill_and_land = []
   }
-  getPossiblePawnMoves () {
-    return getPossiblePawnMoves_white(this.column, this.row, this.moveCount)
+  reset () {
+    this.moves = {}
+    this.attacks = {}
+    this.kill_and_land = []
   }
-  getPossiblePawnAttackMoves () {
-    return getPossiblePawnAttackMoves_white(this.column, this.row, this.color)
+
+  sussPossiblePawnMoves () {
+    let adjustRow = -1 // Go up the board
+    this.moves = getPossiblePawnMoves(this.moveCount, this.column, this.row, this.color, adjustRow)
+  }
+  sussPossiblePawnAttackMoves () {
+    let adjustRow = -1 // Go up the board
+    this.attacks = getPossibleAttacks(this.column, this.row, this.color, adjustRow)
+    this.kill_and_land = getPossibleEnpassantAttacks(this.column, this.row, this.color, adjustRow, 3)
+
+    // if (this.kill_and_land.length > 0) { console.log('WHITE: ' + JSON.stringify(this.kill_and_land, null, 6)) }
   }
 }
 class PawnBlack extends Piece {
   constructor (unicode, column, row, color, id, name) {
     super(unicode, column, row, color, id, name, 1)
-    this.lastMoveWas2Spaces = false
+    this.moves = {}
+    this.attacks = {}
+    this.kill_and_land = []
   }
 
-  getPossiblePawnMoves () {
-    return getPossiblePawnMoves_black(this.column, this.row, this.moveCount)
-  }
-  getPossiblePawnAttackMoves () {
-    return getPossiblePawnAttackMoves_black(this.column, this.row, this.color)
-  }
-/*
-
-  getPossiblePawnMoves () {
-    let movements = {}
-    // forward 1
-    if (isOnTheBoard(this.column, this.row + 1)) {
-      let cid = getCellId_fromColumnAndRow(this.column, this.row + 1)
-      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-      if (pid == undefined) {
-        movements['move1'] = [this.column, this.row + 1]
-      }
-    }
-
-    // forward 2
-    if (isOnTheBoard(this.column, this.row + 2) && this.moveCount == 0) {
-      let cid = getCellId_fromColumnAndRow(this.column, this.row + 2)
-      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-      if (pid == undefined) {
-        movements[PAWN_JUMPED_2_SPACES] = [this.column, this.row + 2]
-      }
-    }
-
-    return movements
+  reset () {
+    this.moves = {}
+    this.attacks = {}
+    this.kill_and_land = []
   }
 
-  getPossiblePawnAttackMoves () {
-    let attacks = {}
-
-    let candidateRow = this.row + 1
-    let candidateCol1 = this.column - 1
-    let candidateCol2 = this.column + 1
-
-    // left side
-    if (isOnTheBoard(candidateCol1, this.row + 1)) {
-      let cid = getCellId_fromColumnAndRow(this.column - 1, this.row + 1)
-      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-      if (pid == undefined) {
-        // do nothing
-      } else {
-        if (pieces[pid].color != this.color) {
-          attacks['left_attack'] = [this.column - 1, this.row + 1]
-        } else {
-          attacks['left_support'] = [this.column - 1, this.row + 1]
-        }
-      }
-    }
-        // right side
-    if (isOnTheBoard(candidateCol1, this.row + 1)) {
-      let cid = getCellId_fromColumnAndRow(candidateCol1, this.row + 1)
-      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-      if (pid == undefined) {
-        // do nothing
-      } else {
-        if (pieces[pid].color != this.color) {
-          attacks['right_attack'] = [this.column + 1, this.row + 1]
-        } else {
-          attacks['right_support'] = [this.column + 1, this.row + 1]
-        }
-      }
-    }
-
-      // en passant ( left )
-    if (this.row == 4) { // Is this pawn in the correct row to launch an en passant attack?
-      let cid = getCellId_fromColumnAndRow(this.column - 1, this.row)
-      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-      if (pid == undefined) {
-        // do nothing
-      } else {
-        if (pieces[pid].color != this.color) { // Is an enemy?
-          if (pieces[pid].name.includes('pawn')) { // Is a pawn?
-            let cid2 = getCellId_fromColumnAndRow(this.column - 1, this.row + 1) // cell is vacant?
-            if (cid2 == undefined) { // Yes, the cell is vacant
-              // Empty cell! It is possible to move here
-              if (pieces[pid].lastMoveWas2Spaces) { // Was the last move that the target pawn made a two move thing?
-                attacks['left_attack_enpassant'] = [this.column - 1, this.row + 1]
-              }
-            }
-          }
-        }
-      }
-    }
-
-      // en passant ( right )
-    if (this.row == 4) { // Is this pawn in the correct row to launch an en passant attack?
-      let cid = getCellId_fromColumnAndRow(this.column + 1, this.row)
-      let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-      if (pid == undefined) {
-        // do nothing
-      } else {
-        if (pieces[pid].color != this.color) { // Is an enemy?
-          if (pieces[pid].name.includes('pawn')) { // Is a pawn?
-            let cid2 = getCellId_fromColumnAndRow(this.column + 1, this.row + 1) // cell is vacant?
-            if (cid2 == undefined) { // Yes, the cell is vacant
-              // Empty cell! It is possible to move here
-              if (pieces[pid].lastMoveWas2Spaces) { // Was the last move that the target pawn made a two move thing?
-                attacks['right_attack_enpassant'] = [this.column + 1, this.row + 1]
-              }
-            }
-          }
-        }
-      }
-    }
-    return attacks
+  sussPossiblePawnMoves () {
+    let adjustRow = 1
+    this.moves = getPossiblePawnMoves(this.moveCount, this.column, this.row, this.color, adjustRow)
   }
-  */
+  sussPossiblePawnAttackMoves () {
+    let adjustRow = 1
+    this.attacks = getPossibleAttacks(this.column, this.row, this.color, adjustRow)
+    this.kill_and_land = getPossibleEnpassantAttacks(this.column, this.row, this.color, adjustRow, 4)
+
+    // if (this.kill_and_land.length > 0) { console.log('BLACK: ' + JSON.stringify(this.kill_and_land, null, 6)) }
+  }
 }
 
+// + --------------------------------------------------------------------------+
+/*
+class PawnBlack extends Piece {
+  constructor (unicode, column, row, color, id, name) {
+    super(unicode, column, row, color, id, name, 1)
+    this.moves = {}
+    this.attacks = {}
+    this.enpassanted_pawn_cells = []
+  }
+  reset () {
+    this.moves = {}
+    this.attacks = {}
+    this.enpassanted_pawn_cells = []
+  }
+
+  sussPossiblePawnMoves () {
+    let adjustRow = -1 // Go up the board
+    this.moves = getPossiblePawnMoves(this.moveCount, this.column, this.row, this.color, adjustRow)
+  }
+  sussPossiblePawnAttackMoves () {
+    let adjustRow = -1 // Go up the board
+    this.attacks = getPossibleAttacks(this.column, this.row, this.color, adjustRow)
+    this.LoH_enpassant_piece_and_target = getPossibleEnpassantAttacks(this.column, this.row, this.color, adjustRow, 4)
+  }
+}
+*/
 // + --------------------------------------------------------------------------+
 let pieces = {}
 

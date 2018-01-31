@@ -4,7 +4,7 @@ const WHITE_CELL = '#f5f5f5' // a cell's color - a smokey white
 const GREEN_CELL = '#31ab36' // a cell's color - a kind of matte green, a guess.
 const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] // For column names
 let SIZE = -1 // This is used a lot - it is the size of the cells : It is set by chess.html's call to setTheSizeForTheBoard()
-let PAWN_JUMPED_2_SPACES = 'jump2'
+
 function setTheSizeForTheBoard (theBoardSize) {
   // This is set in chess.html to 800 - TODO: Make it dynamic
   //
@@ -17,7 +17,12 @@ function getCellId_fromColumnAndRow (c, r) {
   let id = LETTERS[c] + flipflop // now, the id will be something like 'a6'
   return id
 }
-
+function isPawn (pieceName) {
+  if (pieceName.includes('pawn')) {
+    return true
+  }
+  return false
+}
 function getPieceId_onCell (column, row) {
   if (isOnTheBoard(column, row)) {
     let cid = getCellId_fromColumnAndRow(column, row)
