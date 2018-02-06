@@ -1,105 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head><title>Chess</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+
 
 <style>
-
-/* The chess pieces are actually unicode, so to prevent them from being highlighted... */
-/* I got this CSS from stackoverflow... the chess pieces are actually unicode and */
-/* the browser 'wanted' to highlight them during drag-and-dropping actions sweep over them. */
-/* The 'svg text' css prevents that. */
-svg text {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+.unvisited {background-color: #e0e0e0;}
+.active { background-color:  #ffcc00 }
+#pgn{
+    height: 800px;
+    overflow: scroll;
 }
-
-#chessboard {
+#deadpieces {
   border-style: solid;
 }
-
-/* Paint cells different colors in different situations*/
-.influenced {
-  fill:#ffe34c;
-}
-.enpassant {
-  fill:#00ffff;
-}
-
-.attackable {
-  fill:#ffa500;
-}
-.supported {
-  fill:#0000ff;
-}
-.killed {
- font-size: 200%;
-}
-
-#spacer {  
-  width:6px;
-  height:100%;
-  margin-top: 20px;
-  margin-bottom: :20px;
-}
-.forHumans { 
-
-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 20px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 400;
-  line-height: 26.4px;
-  height:100%;
- }
 </style>
 
+<script src='pgn_reader.js'></script>
 
 <script src='js/svg/d3.v2.js'></script>
+
+
+
 </head>
 <body>
 
-<table border='0'>
-<tr>
-  <td valign='top'><svg id="chessboard" width="800" height="800"></svg>
-    <br>
-    <a href="https://github.com/kermitt/chess/tree/simple" class="forHumans">https://github.com/kermitt/chess/tree/simple</a>
 
-  </td>
-  <td  valign='top'><div id='deadpieces'> </div></td> 
-  <td valign='top'>
-    <button class='forHumans' onclick='todo("TODO: import chess PGN file!");'>Import PGN</button>
-    <hr>
-    <textarea class='forHumans' id="pgn" rows='30' cols=100></textarea>
-  </td>
-</tr>
-</table>
+
+
+<table><tr>
+  <td valign='top'><div id="pgn"> pgn</div></td>
+  <td valign='top'><svg id="chessboard" width="700" height="700"></svg></td>
+  <td valign='top'><div id="deadpieces"></div></td>
+</tr></table>
+
 
 <script>
-    let count = 1
-
-  function log( msg) {
-    let x = document.getElementById("log").value
-    result = count + " : " + msg + "\n" + x
-    count++
-    document.getElementById("log").value = result
-  } 
-
-
+  pgn_main()
 </script>
-<script type="text/javascript" src="js/simple/ConfigAndGlobals.js"></script>
-<script type="text/javascript" src="js/simple/Cell.js"></script>
-<script type="text/javascript" src="js/simple/PawnMovement.js"></script>
-<script type="text/javascript" src="js/simple/Pieces.js"></script>
-<script type="text/javascript" src="js/simple/SVGStuff.js"></script>
-<script type="text/javascript" src="js/simple/Board.js"></script>
+
+
+<script type="text/javascript" src="js/pgn/ConfigAndGlobals.js"></script>
+<script type="text/javascript" src="js/pgn/Cell.js"></script>
+<script type="text/javascript" src="js/pgn/Movement.js"></script>
+<script type="text/javascript" src="js/pgn/Pieces.js"></script>
+<script type="text/javascript" src="js/pgn/SVGStuff.js"></script>
+<script type="text/javascript" src="js/pgn/Board.js"></script>
 
 
 <script>
-setTheSizeForTheBoard(800) // TODO: By dynamic
+  var boardSize = document.getElementById('chessboard').clientWidth
+setTheSizeForTheBoard(boardSize)
 let board = new Board()
 
 for ( let id in board.cells ) {
@@ -117,27 +68,6 @@ for ( let key in pieces ) {
 
 }
 
-
-////////// stuff for humans
-function todo(msg) { 
-  console.log(msg)
-  alert(msg)
-}
-
-function writePng() { 
-  //https://www.youtube.com/watch?v=t0QxRXbNu5E via agadmator
-  let example = `1. e4 c5 2. Nf3 e6 3. d4 cd4 4. Nd4 Nc6 5. Nc3 Qc7 6. Be3 a6 7. Bd3 Nf6 8. O-O Bd6 9. Kh1 h5 10. f4 Ng4 11. Qf3 Ne3 12. Qe3 Qb6 13. Nce2 e5 14. Qg3 ed4 15. Qg7 Rf8 16. e5 Be7 17. f5 f6 18. Nf4 Rf7 19. ef6 Ne5 20. Bc4 Nc4 21. Qg8 Bf8 22. Nh5 Nd6 23. Rae1 Kd8 24. Re7 Qb5 25. Rfe1 Qd5 26. Nf4 Qa2 27. Ne6 Qe6 28. fe6 Rf6 29. Rf7`
-  let out = "THIS IS JUST A DUMMY GAME - It does nothing.\n"
-  let moves = example.split(/\d*\./) // e.g.,  10.
-  moves.forEach((m,i)=> { 
-    if ( m.length > 0 ) {
-      let paddedCount = i < 10 ? " " + i : i 
-      out += paddedCount + " | " + m + "\n"
-    }
-  })
-  document.getElementById("pgn").value=out
-}
-writePng()
 </script>
 
 
