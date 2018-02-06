@@ -11,41 +11,6 @@ function svg_zerooutInfluence () {
   }
 }
 
-function svg_paintInfluence (piece) {
-  let n = piece.getTravel()
-  let r = piece.row
-  let c = piece.column
-
-    /// Everything else is easy-peasy
-  piece.moves.forEach((possible, i) => {
-    let col = c
-    let row = r
-    let notBlocked = true
-    for (let j = 0; j < n; j++) {
-      col += possible[0]
-      row += possible[1]
-      if (isOnTheBoard(col, row) && notBlocked) {
-        let cid = getCellId_fromColumnAndRow(col, row)
-        let pid = board.cells[cid].getPieceId() // Does this cell have a piece already on it?
-        if (pid == undefined) {
-          board.cells[cid].isInfluenced = true
-          d3.select('#' + cid).classed('influenced', board.cells[cid].isInfluenced)
-        } else {
-          if (pieces[pid].color == piece.color) {
-            notBlocked = false
-            board.cells[cid].isSupported = true
-            d3.select('#' + cid).classed('supported', board.cells[cid].isSupported)
-          } else {
-            notBlocked = false
-            board.cells[cid].isAttacked = true
-            d3.select('#' + cid).classed('attackable', board.cells[cid].isAttacked)
-          }
-        }
-      }
-    }
-  })
-}
-
 function svg_killPiece_and_place_into_the_deadpieces_bin (cell) {
   let pieceId = cell.pieceId
   let unicode = pieces[pieceId].unicode
@@ -91,18 +56,9 @@ let svg_drag = d3.behavior.drag()
     })
     .on('dragstart', function (d, i) {
       let piece = pieces[this.id]
-      if (isPawn(piece.name)) {
-      //  svg_paintInfluence_forPawn(piece)
-      } else {
-//        svg_paintInfluence(piece)
-
-        let map = getInfluences(piece)
-
-        for (let key in map) {
-          d3.select(key).classed(map[key], true)
-        }
-
-     //   svg_paintInfluence(piece)
+      let map = getInfluences(piece)
+      for (let key in map) {
+        d3.select(key).classed(map[key], true)
       }
     })
     .on('dragend', function (d, i) {
@@ -128,7 +84,7 @@ function svg_addCell (cell) {
         .attr('width', SIZE)
         .attr('height', SIZE)
 
-  let down = -40
+  /* let down = -40
   c.append('svg:text')
         .text(cell.id)
         .attr('transform', 'translate(' + [(SIZE - 30) / 2, (SIZE + down) / 2] + ')')
@@ -137,7 +93,7 @@ function svg_addCell (cell) {
         .attr('font-family', 'Helvetica')
         .attr('fill', '#000')
         .attr('stroke', 'none')
-        .attr('pointer-events', 'none')
+        .attr('pointer-events', 'none') */
 }
 
 function svg_addPieceIntoDom (piece, size) {

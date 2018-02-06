@@ -10,8 +10,11 @@
 #png{
     height: 800px;
     overflow: scroll;
+    border-style: solid;
 }
-
+#deadpieces {
+   border-style: solid;
+}
 </style>
 
 <script src='png_reader.js'></script>
@@ -36,16 +39,12 @@
 <script>
   png_main()
 </script>
-
-
 <script type="text/javascript" src="js/png/ConfigAndGlobals.js"></script>
 <script type="text/javascript" src="js/png/Cell.js"></script>
 <script type="text/javascript" src="js/png/Movement.js"></script>
 <script type="text/javascript" src="js/png/Pieces.js"></script>
 <script type="text/javascript" src="js/png/SVGStuff.js"></script>
 <script type="text/javascript" src="js/png/Board.js"></script>
-
-
 <script>
 let boardSize = document.getElementById('chessboard').clientWidth
 setTheSizeForTheBoard(boardSize)
