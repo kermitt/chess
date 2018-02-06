@@ -34,3 +34,34 @@ function getInfluences (piece) {
   })
   return map
 }
+
+function placePiece_snapTo (piece, mouseX, mouseY) {
+  let cell = board.findClosestLegalCell(mouseX, mouseY)
+  let origCellId = getCellId_fromColumnAndRow(piece.column, piece.row)
+  let origCell = board.cells[origCellId]
+
+  if (cell.isAttacked || cell.isInfluenced) {
+    piece.x = cell.px
+    piece.y = cell.py
+    piece.row = cell.row
+    piece.column = cell.column
+    origCell.removePiece()
+    if (cell.isAttacked) {
+      killPiece_and_place_into_the_deadpieces_bin(cell)
+    }
+    cell.setPiece(piece)
+    piece.moveCount++
+    board.moveCount++
+  } else {
+    let origCellId = getCellId_fromColumnAndRow(piece.column, piece.row)
+    piece.x = origCell.px
+    piece.y = origCell.py
+  }
+/*
+  d3.select('#' + piece.id)
+    .data([{'x': piece.x, 'y': piece.y}])
+    .attr('transform', 'translate(' + piece.x + ',' + piece.y + ')')
+
+  zerooutInfluence()
+  */
+}

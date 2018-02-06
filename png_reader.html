@@ -51,6 +51,7 @@ setTheSizeForTheBoard(boardSize)
 let board = new Board()
 
 for ( let id in board.cells ) {
+  // svg thing
   svg_addCell(board.cells[id])
 }
 
@@ -61,6 +62,7 @@ for ( let key in pieces ) {
   piece.x = cell.px
   piece.y = cell.py
   cell.setPiece(piece)
+  // svg thing
   svg_addPieceIntoDom(piece)
 
 }
