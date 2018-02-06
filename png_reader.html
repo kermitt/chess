@@ -1,33 +1,70 @@
+<!DOCTYPE html>
 <html>
-<head>
-<script src='png_reader.js'></script>
-<script src='js/svg/d3.v2.js'></script>
-<style>
+<head><title>Chess</title>
 <link rel="stylesheet" type="text/css" href="style.css">
+
+
+<style>
 .unvisited {background-color: #e0e0e0;}
 .active { background-color:  #ffcc00 }
+#png{
+    height: 800px;
+    overflow: scroll;
+}
+
 </style>
+
+<script src='png_reader.js'></script>
+
+<script src='js/svg/d3.v2.js'></script>
+
+
+
 </head>
 <body>
 
+
+
+
 <table><tr>
   <td valign='top'><div id="png"> png</div></td>
-  <td valign='top'><svg id="chessboard" width="800" height="800"></svg></td>
+  <td valign='top'><svg id="chessboard" width="700" height="700"></svg></td>
+  <td valign='top'><div id="deadpieces"></div></td>
 </tr></table>
 
 
 <script>
-
   png_main()
 </script>
 
 
+<script type="text/javascript" src="js/png/ConfigAndGlobals.js"></script>
+<script type="text/javascript" src="js/png/Cell.js"></script>
+<script type="text/javascript" src="js/png/Movement.js"></script>
+<script type="text/javascript" src="js/png/Pieces.js"></script>
+<script type="text/javascript" src="js/png/SVGStuff.js"></script>
+<script type="text/javascript" src="js/png/Board.js"></script>
+
+
 <script>
+let boardSize = document.getElementById('chessboard').clientWidth
+setTheSizeForTheBoard(boardSize)
+let board = new Board()
 
+for ( let id in board.cells ) {
+  svg_addCell(board.cells[id])
+}
 
+for ( let key in pieces ) {
+  let piece = pieces[key]
+  let id = getCellId_fromColumnAndRow( piece.column, piece.row)
+  let cell = board.cells[id]
+  piece.x = cell.px
+  piece.y = cell.py
+  cell.setPiece(piece)
+  svg_addPieceIntoDom(piece)
+
+}
 </script>
-
-
-
 </body>
 </html>
