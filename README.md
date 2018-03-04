@@ -1,4 +1,5 @@
 Chess!
 
+## DOCS
+TODO  
 
-<img src="chess_board.png">
