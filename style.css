@@ -1,0 +1,321 @@
+.cell_black{  
+    background-color:#00ff00;
+    width:50px;
+    height:50px;
+    text-align: center;
+  }
+  .cell_white{  
+    background-color:#ffffff;
+    width:50px;
+    height:50px;
+    text-align: center;
+  }
+  .piece {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-size: 30px;
+              width:50px;
+              height:50px;
+/*              background-color: blue; */
+
+
+}
+
+.piece:hover { 
+    background-color: yellow;
+}
+
+.possible { 
+    background-color:blue;
+}
+
+
+
+
+/* The chess pieces are actually unicode, so to prevent them from being highlighted... */
+/* I got this CSS from stackoverflow... the chess pieces are actually unicode and */
+/* the browser 'wanted' to highlight them during drag-and-dropping actions sweep over them. */
+/* The 'svg text' css prevents that. */
+svg text {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+  }
+  
+  path {
+    fill: none;
+    stroke: #000;
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  
+  .blue {
+  background-color: #0000ff;
+  }
+  .orange {
+  background-color: #ff6633;
+  
+  }
+  .grey {
+  background-color: #e0e0e0;
+  }
+  
+  .metro_line {
+    fill: none;
+    stroke: #aaaaaa;
+    stroke-width: 1.5px;
+  }
+  
+  .metro_circle {
+    fill: #aaaaaa;
+  }
+  
+  .button_selected { 
+  
+     background-color: #ff6633;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 20px;
+      margin: 4px 2px;
+      cursor: pointer;
+  }
+  
+  .button_not_selected { 
+  
+     background-color: #0000ff;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 20px;
+      margin: 4px 2px;
+      cursor: pointer;
+  }
+  
+  
+  
+  #chessboard {
+    border-style: solid;
+    margin-left: 20px;
+      margin-top: 10px;
+  
+    /* width and height set by javascript innerWindow */ 
+  }
+  
+  .human {
+    border-style: solid;
+  
+    /* width and heigh set by javascript innerWindow */
+  }
+  
+  
+  
+  #current_state_forTheHuman {
+      padding: 6px 10px;
+      margin-left: 20px;
+      margin-top: 10px;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size:24px;
+  }
+  
+  
+  
+  .active_btn {
+      background-color: #ff6633;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 20px;
+      margin: 4px 2px;
+      cursor: pointer;
+  }
+  
+  .btn {
+      background-color: #0000ff;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 20px;
+      margin: 4px 2px;
+      cursor: pointer;
+  }
+  
+  
+  #color_select {
+    background-color:#0000ff;
+    color:white;
+      padding: 6px 10px;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size:24px;
+      height:100%;  
+  }
+  
+  #container { 
+      margin-left: 20px;
+      margin-top: 10px;
+  }
+  
+  #board {
+  
+    /* width and heigh set by javascript innerWindow */
+  }
+  
+  
+  /* Paint cells different colors in different situations*/
+  .influenced {
+    fill:#ffe34c;
+  }
+  .enpassant {
+    fill:#00ffff;
+  }
+  
+  .attackable {
+    fill:#ffa500;
+  }
+  .supported {
+    fill:#0000ff;
+  }
+  .killed {
+   font-size: 200%;
+  }
+  
+  #spacer {  
+    width:6px;
+    height:100%;
+    margin-top: 20px;
+    margin-bottom: :20px;
+  }
+  .forHumans { 
+  
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 26.4px;
+    height:100%;
+   }
+  
+  #info_table {
+    width:100%;
+  }
+  
+  .even_info_row {
+    margin-left: 10px;
+  /*  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    color:#000000;
+    width:98%;
+    background-color: #e0e0e0;
+     border:1px solid black;
+   
+  }
+  
+  
+  
+  .odd_info_row {
+    margin-left: 10px;
+  /*  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    color:#000000;
+    width:98%;
+    background-color: #fafafa;
+    border:1px solid black;
+   
+  }
+  
+  
+  .short_cell {
+    width:100px;
+  }
+  .even_info_row_name {
+     margin-left: 10px;
+  /*  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    color:#000000;
+    background-color: #e0e0e0;
+     border:1px solid black; 
+       width:50%;
+  }
+  
+  .odd_info_row_name {
+     margin-left: 10px;
+  /*  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    color:#000000;
+  
+    background-color: #fafafa;
+     border:1px solid black; 
+       width:50%;
+  }
+  
+  
+  
+  .highlight {
+    margin-left: 10px;
+  /*  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    color:#000000;
+    width:98%;
+    background-color: #ff7744;
+     border:1px solid black;
+   
+  }
+  
+  
+  
+  .even_tr {
+    background-color: #e0e0e0;
+  }
+  .odd_tr {
+    background-color: #fafafa;
+  }
+  .id {
+    width:50px;
+    border:1px solid black;
+    text-align: center;
+  }
+  
+  
