@@ -9,6 +9,7 @@
     width:50px;
     height:50px;
     text-align: center;
+    fill:#ffffff;
   }
   .piece {
     -webkit-touch-callout: none; /* iOS Safari */
@@ -25,16 +26,18 @@
 
 
 }
-
+/*
 .piece:hover { 
     background-color: yellow;
 }
-
+*/
 .possible { 
     background-color:blue;
 }
 
-
+.chosen { 
+  background-color:#ff0000;
+}
 
 
 /* The chess pieces are actually unicode, so to prevent them from being highlighted... */
