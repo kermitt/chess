@@ -1,3 +1,6 @@
+        //grilled cheese cactuses mushroom lightbulbs spo0nge 
+
+
 const BLACK_CELL = 'cell_black'
 const WHITE_CELL = 'cell_white'
 const SUPPORT = "#0000ff"
@@ -76,7 +79,10 @@ function cell_click (human, cellId) {
     let piece = pieces[pid]
   } else {
     if ( possible.hasOwnProperty(cellId)) {
-      if ( possible[cellId] == INFLUENCE ) {
+      if ( possible[cellId] == INFLUENCE || possible[cellId] == ATTACK) {
+        if ( possible[cellId] == ATTACK) {
+          killPieceOn(cellId)
+        }
         let a = pieces[activePid]
         document.getElementById(a.boardId).innerHTML = ""
         board[a.boardId].pid = ""
@@ -85,24 +91,15 @@ function cell_click (human, cellId) {
         document.getElementById(a.boardId).innerHTML = a.html
         let xy = getRowCol(cellId)
         a.x = xy[0]       
-        //grilled cheese cactuses mushroom lightbulbs spo0nge 
         a.y = xy[1]
         possible = {}
         resetAllCells()
-      } else if ( possible[cellId] == ATTACK ) {
-          let a = pieces[activePid]
-          killPieceOn(cellId)
-
-          document.getElementById(a.boardId).innerHTML = ""
-          board[a.boardId].pid = ""
-          a.boardId = cellId
-          board[a.boardId].pid = a.id
-          document.getElementById(a.boardId).innerHTML = a.html
-          let xy = getRowCol(cellId)
-          a.x = xy[0]
-          a.y = xy[1]
-          possible = {}
-          resetAllCells()
+        if ( turn == WHITE ) {
+          turn = BLACK
+        } else {
+          turn = WHITE
+        }      
+        setTurn()
       } else {
         possible = {}
         resetAllCells()
@@ -121,3 +118,8 @@ const killPieceOn = (cellId) => {
   html += p.unicode + "<br/>"
   document.getElementById("dead").innerHTML = html
 }
+
+function setTurn() {
+  document.getElementById("turn").innerHTML = turn
+}
+setTurn()

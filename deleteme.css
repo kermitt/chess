@@ -1,0 +1,89 @@
+body {
+            background-color:#f6f6f6;
+        }
+.commonLaF {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: 400;
+            line-height: 18px;
+            border-style: solid;
+        }
+        #content {
+            margin-top:20px;
+            margin-left:20px;
+        }
+        .break { 
+            background-color: #afafaf;
+        }
+#timer {
+    margin-top:20px;
+    margin-left:30px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: 400;
+            line-height: 18px;
+
+}
+.actual {
+    background-color: #0000ff;
+    color:#ffffff;
+}
+
+.responsive {
+    background-color: #00ff00;
+}
+.unresponsive { 
+    background-color: #e0e0e0;
+}
+.success {
+background-color: #00ff00;
+}
+
+.failed {
+ background-color:#ff6633; 
+}
+
+.running {
+ background-color:#ffff00; 
+
+}
+.canceled {
+  background-color:#afafaf;
+}
+
+.created {
+   background-color:#66b2b2;
+}
+.pending {
+  background-color:#008080;
+}
+
+.not_found { 
+  background-color: #ff0000;
+} 
+
+.even {
+  background-color: #afafaf;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-left: 10px;
+  border: 1px solid #000000;
+  margin-right: 10px;
+
+
+}
+.odd {
+  background-color: #e6e6e6;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-left: 10px;
+  border: 1px solid #000000;
+  margin-right: 10px;
+}
+
+
+
+
+
