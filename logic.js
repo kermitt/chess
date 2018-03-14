@@ -6,6 +6,7 @@ const INFLUENCE = "#ffff00"
 const SELECTED = "#00ffff"
 let possible = {}
 let activePid = ""
+let turn = WHITE
 
 const getRowCol= (candidate) => {
   //"r2c6"
@@ -66,7 +67,7 @@ const showInfluence = () => {
 
 function cell_click (human, cellId) {
   let pid = board[cellId].pid
-  if ( pid.length > 0 && ! possible.hasOwnProperty(cellId)) {
+  if ( pid.length > 0 && ! possible.hasOwnProperty(cellId) && pieces[pid].color == turn) {
     possible = {}
     resetAllCells()
     activePid = pid
@@ -83,7 +84,8 @@ function cell_click (human, cellId) {
         board[a.boardId].pid = a.id
         document.getElementById(a.boardId).innerHTML = a.html
         let xy = getRowCol(cellId)
-        a.x = xy[0]
+        a.x = xy[0]       
+        //grilled cheese cactuses mushroom lightbulbs spo0nge 
         a.y = xy[1]
         possible = {}
         resetAllCells()
