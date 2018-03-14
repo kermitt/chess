@@ -26,6 +26,24 @@
 
 
 }
+#dead {
+  font-size: 10px;
+
+ /* 
+    background-color: #ff6633;
+     border: none;
+     color: white;
+     padding: 15px 32px;
+     text-align: center;
+     text-decoration: none;
+     display: inline-block;
+     font-size: 40px;
+     margin: 4px 2px;
+     cursor: pointer;
+     */
+}
+
+
 /*
 .piece:hover { 
     background-color: yellow;

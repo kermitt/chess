@@ -87,24 +87,35 @@ function cell_click (human, cellId) {
         a.y = xy[1]
         possible = {}
         resetAllCells()
-      } 
-      else if ( possible[cellId] == ATTACK ) {
-console.log("ATTACK !")
+      } else if ( possible[cellId] == ATTACK ) {
           let a = pieces[activePid]
+          killPieceOn(cellId)
+
           document.getElementById(a.boardId).innerHTML = ""
           board[a.boardId].pid = ""
           a.boardId = cellId
           board[a.boardId].pid = a.id
-
           document.getElementById(a.boardId).innerHTML = a.html
           let xy = getRowCol(cellId)
           a.x = xy[0]
           a.y = xy[1]
           possible = {}
           resetAllCells()
+      } else {
+        possible = {}
+        resetAllCells()
       }
     } else {
     }
     console.log("! pid >" + pid + "<   " + activePid )
   }
+}
+
+const killPieceOn = (cellId) => { 
+  let c = board[cellId]
+  let p = pieces[c.pid]
+  html = document.getElementById("dead").innerHTML
+  let count = html.split("br")
+  html += p.unicode + "<br/>"
+  document.getElementById("dead").innerHTML = html
 }
