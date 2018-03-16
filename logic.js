@@ -1,6 +1,4 @@
         //grilled cheese cactuses mushroom lightbulbs spo0nge 
-
-
 const BLACK_CELL = 'cell_black'
 const WHITE_CELL = 'cell_white'
 const SUPPORT = "#0000ff"
@@ -158,8 +156,6 @@ const addToHistory = (activePid, boardId, cellId) => {
   })
   html += "</table>"
   document.getElementById("pgn").innerHTML = html
-
-
 } 
 
 const killPieceOn = (cellId) => { 
