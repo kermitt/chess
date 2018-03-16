@@ -10,6 +10,7 @@ const SELECTED = "#00ffff"
 let possible = {}
 let activePid = ""
 let turn = WHITE
+let history = [] 
 
 const getRowCol= (candidate) => {
   //"r2c6"
@@ -18,6 +19,7 @@ const getRowCol= (candidate) => {
   let col = parseInt(ary[1])
   return [row,col]
 }
+
 const resetAllCells = () => {
   for ( var id in board) {
     resetCellColor(id)
@@ -31,7 +33,9 @@ const resetCellColor = (id) => {
   document.getElementById(id).style.backgroundColor = bgcolor
 }
 
-const showInfluence = () => {
+
+// This does not cover pawns or kings.
+const possibleMoves = () => {
   let p = pieces[activePid]
   p.moves.forEach((xy)=>{
     let x = p.x
@@ -72,88 +76,11 @@ const isOnboard = (x,y) =>  {
   } 
   return false
 }
-const pawnMove = (cellId, pawn) => {
-  //console.log(JSON.stringify(pawn,null,6))
-  let north_or_south = -1 // white piece
-  if ( pawn.color == BLACK ) {
-    north_or_south = 1 // black piece
-  }  
-  let possibleX = pawn.x + north_or_south
-
-  // forward 1 
-  if ( isOnboard(possibleX,pawn.y ))  {
-    let cellId = 'r' + possibleX + 'c' +pawn.y 
-    let pid = board[cellId].pid
-    if ( pid.length > 0) {
-      // blocked!
-    } else {
-      possible[cellId] = INFLUENCE
-    }
-  }
-
-  // attack or support one side, if possible 
-  let possibleY = pawn.y + 1 
-  if ( isOnboard(possibleX,possibleY ))  {
-    let cellId = 'r' + possibleX + 'c' + possibleY
-    let pid = board[cellId].pid
-    if ( pid.length > 0) {
-      if ( pieces[pid].color == pawn.color) {
-        possible[cellId] = SUPPORT
-      } else { 
-        possible[cellId] = ATTACK        
-      }
-    } else {
-      // Nothing there! 
-    }
-  }
-
-  // attack or support one side, if possible 
-  possibleY = pawn.y - 1 
-  if ( isOnboard(possibleX,possibleY ))  {
-    let cellId = 'r' + possibleX + 'c' + possibleY
-    let pid = board[cellId].pid
-    if ( pid.length > 0) {
-      if ( pieces[pid].color == pawn.color) {
-        possible[cellId] = SUPPORT
-      } else { 
-        possible[cellId] = ATTACK        
-      }
-    } else {
-      // Nothing there! 
-    }
-  }
-
-  
 
 
-
-  // forward 2 
-  if ( pawn.moveCount == 0 ) {
-    possibleX  += north_or_south
-    if ( isOnboard(possibleX,pawn.y ))  {
-      let cellId = 'r' + possibleX + 'c' + pawn.y 
-      let pid = board[cellId].pid
-      if ( pid.length > 0) {
-        // blocked!
-      } else {
-        possible[cellId] = INFLUENCE 
-      }
-    }
-  }
-
-
-
-
-
-
-  for ( let cellId in possible ) { 
-    document.getElementById(cellId).style.backgroundColor = possible[cellId]
-  }
-}
-const kingMove = (cellId, king) => { 
-}
 function cell_click (human, cellId) {
   let pid = board[cellId].pid
+  // BEGIN A MOVE 
   if ( pid.length > 0 && ! possible.hasOwnProperty(cellId) && pieces[pid].color == turn) {
     let piece = pieces[pid]
     possible = {}
@@ -165,10 +92,10 @@ function cell_click (human, cellId) {
     } else if ( piece.id == "wk" || piece.id == "bk") {
       kingMove(cellId, piece)
     } else {
-      showInfluence()
-      //console.log(JSON.stringify(piece,null,6))
+      possibleMoves()
     } 
   } else {
+    // END A MOVE 
     if ( possible.hasOwnProperty(cellId)) {
       if ( possible[cellId] == INFLUENCE || possible[cellId] == ATTACK) {
         if ( possible[cellId] == ATTACK) {
@@ -176,14 +103,19 @@ function cell_click (human, cellId) {
         }
         let a = pieces[activePid]
         a.moveCount++
+
+        addToHistory(activePid, a.boardId, cellId)
+
         document.getElementById(a.boardId).innerHTML = ""
-        board[a.boardId].pid = ""
+        board[a.boardId].pid = "" // remove record of the piece from the old cell
         a.boardId = cellId
-        board[a.boardId].pid = a.id
+        board[a.boardId].pid = a.id // set record of the piece to the new cell
         document.getElementById(a.boardId).innerHTML = a.html
         let xy = getRowCol(cellId)
         a.x = xy[0]       
         a.y = xy[1]
+
+
         possible = {}
         resetAllCells()
         if ( turn == WHITE ) {
@@ -196,11 +128,30 @@ function cell_click (human, cellId) {
         possible = {}
         resetAllCells()
       }
-    } else {
     }
-    console.log("! pid >" + pid + "<   " + activePid )
   }
 }
+const addToHistory = (activePid, boardId, cellId) => { 
+  let summary = {}
+  //history = []
+  summary.pieceId = activePid // which piece
+  summary.startCell = boardId // from cell
+  summary.endCell = cellId // to cell 
+  history.push(summary)
+  let html = ""
+  let i = 0
+  history.forEach((hist)=> { 
+    html += "<button class='hist' onclick='summarySelect(i);'>" + activePid + "  " + boardId + "   "+  cellId + "  " + i + "</button>"
+    i++
+    if ( i > 1 ) {
+      html += "<br/>"
+      i = 0
+    }
+  })
+  document.getElementById("pgn").innerHTML = html
+
+
+} 
 
 const killPieceOn = (cellId) => { 
   let c = board[cellId]
