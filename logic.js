@@ -138,16 +138,25 @@ const addToHistory = (activePid, boardId, cellId) => {
   summary.startCell = boardId // from cell
   summary.endCell = cellId // to cell 
   history.push(summary)
-  let html = ""
+  console.log(JSON.stringify(history,null,6))
+  let html = "<table border = '1'>"
   let i = 0
   history.forEach((hist)=> { 
-    html += "<button class='hist' onclick='summarySelect(i);'>" + activePid + "  " + boardId + "   "+  cellId + "  " + i + "</button>"
+    let pieceId = hist.pieceId
+    let startCell = hist.startCell
+    let endCell = hist.endCell
+    if ( i == 0 ) { 
+      html += "<tr><td><button class='hist' onclick='summarySelect(i);'>id: " + pieceId + "|from: " + startCell + "|to: "+  endCell + "</button></td>"
+ 
+    } else {
+      html += "</td><td><button class='hist' onclick='summarySelect(i);'>id: " + pieceId + "|from: " + startCell + "|to: "+  endCell + "</button></td></tr>"
+    }
     i++
     if ( i > 1 ) {
-      html += "<br/>"
       i = 0
     }
   })
+  html += "</table>"
   document.getElementById("pgn").innerHTML = html
 
 

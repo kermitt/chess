@@ -1,0 +1,3 @@
+
+const kingMove = (cellId, king) => { 
+}
