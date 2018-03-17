@@ -9,9 +9,9 @@ let possible = {}
 let activePid = ""
 let turn = WHITE
 let history = [] 
-let ENPASSANT = 'enpassant'
-let PAWN_MOVED_TWICE = 'pawn_moved_twice'
-let CASTLE = 'castle'
+const ENPASSANT = 'enpassant'
+const PAWN_MOVED_TWICE = 'pawn_moved_twice'
+const CASTLE = 'castle'
 let NORMAL = 'normal'
 
 const killPieceOn = (cellId) => { 
@@ -25,6 +25,15 @@ const killPieceOn = (cellId) => {
   document.getElementById("dead").innerHTML = html
 }
 
+function remove_selected() { 
+  if ( activePid.length > 0 ) {
+    killPieceOn( pieces[activePid].boardId)
+    resetAllCells()
+
+  } else {
+    alert("There is no active piece to remove.")
+  }
+}
 
 function setTurn() {
   document.getElementById("turn").innerHTML = turn
@@ -102,11 +111,18 @@ const isOnboard = (x,y) =>  {
   return false
 }
 
-let killkill = ""
 function cell_click (human, cellId) {
   let pid = board[cellId].pid
   // BEGIN A MOVE 
-  if ( pid.length > 0 && ! possible.hasOwnProperty(cellId) && pieces[pid].color == turn) {
+  //if ( pid.length > 0 && ! possible.hasOwnProperty(cellId) && pieces[pid].color == turn) {
+
+  let isOk = false
+  if ( CURRENT_MODE == PLAY_MODE ) {
+    isOk = ( pid.length ) > 0 && ! ( possible.hasOwnProperty(cellId)) && (pieces[pid].color == turn)
+  } else if ( CURRENT_MODE == EXPLORE_MODE) {
+    isOk = ( pid.length ) > 0 && ! ( possible.hasOwnProperty(cellId))
+  }
+  if ( isOk ) { 
     let piece = pieces[pid]
     possible = {}
     resetAllCells()
@@ -163,9 +179,8 @@ function cell_click (human, cellId) {
   }
 }
 
-
-
 const makeTable = () =>  { 
+  // TODO: Be less dumb
   let html = "<table border='1'>"
   let i = 0;
   while ( i < 200) {
@@ -182,20 +197,13 @@ makeTable()
 
 const addToHistory = (activePid, boardId, cellId, result, type) => { 
   let summary = {}
-  //history = []
   summary.pieceId = activePid // which piece
   summary.startCell = boardId // from cell
   summary.endCell = cellId // to cell 
   summary.result = result // attack or support or influence?
   summary.type = type // normal or enpassant or castle?
-  //console.log("IN "  + JSON.stringify( summary,null,6))
   history.push(summary)
-
   let i = history.length - 1
-
-    html = "<button class='hist' onclick='summarySelect(" + i + ");'>" + summary.pieceId + " | " + summary.type + "</button>"  
-    document.getElementById("m" + i ).innerHTML = html 
-
-
-
+  html = "<button class='hist' onclick='summarySelect(" + i + ");'>" + summary.pieceId + " | " + summary.type + "</button>"  
+  document.getElementById("m" + i ).innerHTML = html 
 }

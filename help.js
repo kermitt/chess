@@ -43,8 +43,8 @@ l('<div id="active_piece"></div>')
 l('<script>')
 l('let board=' + JSON.stringify(board, null, 6))
 l('</script>')
-l('<script src="board.js"></script>') // stuff
 l('<script src="pieces.js"></script>') // pieces
+l('<script src="board.js"></script>') // stuff
 l('<script src="logic.js"></script>') // move logic
 l('<script src="pgn.js"></script>') // pgn stuff : TODO = everything pgn
 l('<!-- Pawns and Kings have weird movement, hence breakout to a diff file //-->')

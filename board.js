@@ -1,16 +1,18 @@
 
 
 
-let play_mode = "mode: play"
-let explore_mode = "mode: explore"
-let current_mode = play_mode
+const PLAY_MODE = "mode: play"
+const EXPLORE_MODE = "mode: explore"
+let CURRENT_MODE = PLAY_MODE
 function setMode() {
-    if ( current_mode == play_mode ) {
-        current_mode = explore_mode
+    if ( CURRENT_MODE == PLAY_MODE ) {
+        CURRENT_MODE = EXPLORE_MODE
         document.getElementById("remove_selected").style.display = "inline"
+        document.getElementById("turn").style.display = "none"
     } else {
-        current_mode = play_mode
+        CURRENT_MODE = PLAY_MODE
         document.getElementById("remove_selected").style.display = "none"
+        document.getElementById("turn").style.display = "inline"
     }
-    document.getElementById("mode").innerHTML = current_mode
+    document.getElementById("mode").innerHTML = CURRENT_MODE
 }
