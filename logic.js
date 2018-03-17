@@ -9,6 +9,27 @@ let possible = {}
 let activePid = ""
 let turn = WHITE
 let history = [] 
+let ENPASSANT = 'enpassant'
+let PAWN_MOVED_TWICE = 'pawn_moved_twice'
+let CASTLE = 'castle'
+let NORMAL = 'normal'
+
+
+
+const killPieceOn = (cellId) => { 
+  let c = board[cellId]
+  let p = pieces[c.pid]
+  html = document.getElementById("dead").innerHTML
+  let count = html.split("br")
+  html += p.unicode + "<br/>"
+  document.getElementById("dead").innerHTML = html
+}
+
+function setTurn() {
+  document.getElementById("turn").innerHTML = turn
+}
+setTurn()
+
 
 const getRowCol= (candidate) => {
   //"r2c6"
@@ -17,6 +38,11 @@ const getRowCol= (candidate) => {
   let col = parseInt(ary[1])
   return [row,col]
 }
+
+const composeCellId = (x,y) => { 
+  let cellId = 'r' + x + 'c' + y
+  return cellId
+} 
 
 const resetAllCells = () => {
   for ( var id in board) {
@@ -44,7 +70,7 @@ const possibleMoves = () => {
       i++
       x += xy[0]
       y += xy[1]
-      if ( isOnboard(x, y ))  { //}      if ( x > -1 && x < 8 && y > -1 && y < 8 ) {
+      if ( isOnboard(x, y ))  {
         let cellId = 'r' + x + 'c' + y
         let pid = board[cellId].pid
 
@@ -52,18 +78,18 @@ const possibleMoves = () => {
           let b = pieces[pid]
           let a = pieces[activePid]
           if ( a.color === b.color ) {
-            possible[cellId] = SUPPORT
+            possible[cellId] = {result:SUPPORT, type:NORMAL}
             continueOn = false
           } else {
-            possible[cellId] = ATTACK
+            possible[cellId] = {result:ATTACK, type:NORMAL}
             continueOn = false
           }
         } else {
-          possible[cellId] = INFLUENCE
+          possible[cellId] = {result:INFLUENCE, type:NORMAL}
         }
       }
       for ( let cellId in possible ) { 
-        document.getElementById(cellId).style.backgroundColor = possible[cellId]
+        document.getElementById(cellId).style.backgroundColor = possible[cellId].result
       }
     }
   })
@@ -95,14 +121,20 @@ function cell_click (human, cellId) {
   } else {
     // END A MOVE 
     if ( possible.hasOwnProperty(cellId)) {
-      if ( possible[cellId] == INFLUENCE || possible[cellId] == ATTACK) {
-        if ( possible[cellId] == ATTACK) {
+      if ( possible[cellId].result == INFLUENCE || possible[cellId].result == ATTACK) {
+        if ( possible[cellId].result == ATTACK) {
           killPieceOn(cellId)
         }
         let a = pieces[activePid]
         a.moveCount++
 
-        addToHistory(activePid, a.boardId, cellId)
+console.log("FOUND: " + cellId )
+for ( let k in possible ) { 
+  console.log( k + " --> " + JSON.stringify( possible[k]) )
+}
+console.log("POSSIBLE: " + possible[cellId].type )
+
+        addToHistory(activePid, a.boardId, cellId, possible[cellId].result, possible[cellId].type)
 
         document.getElementById(a.boardId).innerHTML = ""
         board[a.boardId].pid = "" // remove record of the piece from the old cell
@@ -112,7 +144,6 @@ function cell_click (human, cellId) {
         let xy = getRowCol(cellId)
         a.x = xy[0]       
         a.y = xy[1]
-
 
         possible = {}
         resetAllCells()
@@ -129,45 +160,40 @@ function cell_click (human, cellId) {
     }
   }
 }
-const addToHistory = (activePid, boardId, cellId) => { 
+
+
+
+const makeTable = () =>  { 
+  let html = "<table border='1'>"
+  let i = 0;
+  while ( i < 200) {
+    html += "<tr>"
+    html += "<td><div id='m" + i + "'></div></td>"
+    i++
+    html += "<td><div id='m" + i + "'></div></td>"
+    i++
+    html += "</tr>"
+  }
+  document.getElementById("pgn").innerHTML = html
+}
+makeTable()
+
+const addToHistory = (activePid, boardId, cellId, result, type) => { 
   let summary = {}
   //history = []
   summary.pieceId = activePid // which piece
   summary.startCell = boardId // from cell
   summary.endCell = cellId // to cell 
+  summary.result = result // attack or support or influence?
+  summary.type = type // normal or enpassant or castle?
+  //console.log("IN "  + JSON.stringify( summary,null,6))
   history.push(summary)
-  console.log(JSON.stringify(history,null,6))
-  let html = "<table border = '1'>"
-  let i = 0
-  history.forEach((hist)=> { 
-    let pieceId = hist.pieceId
-    let startCell = hist.startCell
-    let endCell = hist.endCell
-    if ( i == 0 ) { 
-      html += "<tr><td><button class='hist' onclick='summarySelect(i);'>id: " + pieceId + "|from: " + startCell + "|to: "+  endCell + "</button></td>"
- 
-    } else {
-      html += "</td><td><button class='hist' onclick='summarySelect(i);'>id: " + pieceId + "|from: " + startCell + "|to: "+  endCell + "</button></td></tr>"
-    }
-    i++
-    if ( i > 1 ) {
-      i = 0
-    }
-  })
-  html += "</table>"
-  document.getElementById("pgn").innerHTML = html
-} 
 
-const killPieceOn = (cellId) => { 
-  let c = board[cellId]
-  let p = pieces[c.pid]
-  html = document.getElementById("dead").innerHTML
-  let count = html.split("br")
-  html += p.unicode + "<br/>"
-  document.getElementById("dead").innerHTML = html
-}
+  let i = history.length - 1
 
-function setTurn() {
-  document.getElementById("turn").innerHTML = turn
+    html = "<button class='hist' onclick='summarySelect(" + i + ");'>" + summary.pieceId + " | " + summary.type + "</button>"  
+    document.getElementById("m" + i ).innerHTML = html 
+
+
+
 }
-setTurn()
