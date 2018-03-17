@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<div id="turn"></div>
+<button id="turn"></button><button id="mode" onclick="setMode();">mode: play</button><button id="remove_selected" onclick="remove_selected();">remove: selected</button>
 <table border="1"><tr><td valign="top">
 <table border="1">
 
@@ -549,6 +549,7 @@ let board={
       }
 }
 </script>
+<script src="board.js"></script>
 <script src="pieces.js"></script>
 <script src="logic.js"></script>
 <script src="pgn.js"></script>

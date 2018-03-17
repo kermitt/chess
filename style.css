@@ -11,6 +11,9 @@
     text-align: center;
     fill:#ffffff;
   }
+  #remove_selected {
+    display: none; 
+  }
   .piece {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
