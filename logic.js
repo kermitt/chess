@@ -14,16 +14,17 @@ let PAWN_MOVED_TWICE = 'pawn_moved_twice'
 let CASTLE = 'castle'
 let NORMAL = 'normal'
 
-
-
 const killPieceOn = (cellId) => { 
   let c = board[cellId]
   let p = pieces[c.pid]
   html = document.getElementById("dead").innerHTML
+  board[cellId].pid = ""
+  document.getElementById(cellId).innerHTML = ""
   let count = html.split("br")
   html += p.unicode + "<br/>"
   document.getElementById("dead").innerHTML = html
 }
+
 
 function setTurn() {
   document.getElementById("turn").innerHTML = turn
@@ -101,7 +102,7 @@ const isOnboard = (x,y) =>  {
   return false
 }
 
-
+let killkill = ""
 function cell_click (human, cellId) {
   let pid = board[cellId].pid
   // BEGIN A MOVE 
@@ -123,17 +124,18 @@ function cell_click (human, cellId) {
     if ( possible.hasOwnProperty(cellId)) {
       if ( possible[cellId].result == INFLUENCE || possible[cellId].result == ATTACK) {
         if ( possible[cellId].result == ATTACK) {
-          killPieceOn(cellId)
+          if ( possible[cellId].type == NORMAL ) {
+            killPieceOn(cellId)
+          } else if ( possible[cellId].type == ENPASSANT ) {
+            let rowCol = getRowCol(cellId)
+            let row = rowCol[0] + pieces[activePid].move * -1 // Flip the sign: neg to pos & vv.
+            let col = rowCol[1]
+            let cellIdBehind = composeCellId(row,col)
+            killPieceOn(cellIdBehind)
+          }
         }
         let a = pieces[activePid]
         a.moveCount++
-
-console.log("FOUND: " + cellId )
-for ( let k in possible ) { 
-  console.log( k + " --> " + JSON.stringify( possible[k]) )
-}
-console.log("POSSIBLE: " + possible[cellId].type )
-
         addToHistory(activePid, a.boardId, cellId, possible[cellId].result, possible[cellId].type)
 
         document.getElementById(a.boardId).innerHTML = ""

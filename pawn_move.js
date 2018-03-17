@@ -19,31 +19,27 @@ const pawn_attack = (pawn) => {
 const pawn_enpassant=(pawn)=> {
     if ( history.length > 0 ) { 
         let summary = history[history.length - 1]
-
-
-        if ( summary.type = PAWN_MOVED_TWICE ) {
-
-      //      console.log("PE " + JSON.stringify(summary,null,6))
-
-
-
-            let x = pawn.x
-            let y1 = pawn.y + 1
-            let cellId1 = composeCellId( x, y1 )
-            if ( summary.to == cellId1) {
-                let cellId1 = composeCellId( x + pawn.move, y1 )
-                possible[cellId1] = {result:ATTACK, type:ENPASSANT}
-            }
-            let y2 = pawn.y - 1
-            let cellId2 = composeCellId( x, y2 )
-            if ( summary.to == cellId1) {
-                let cellId2 = composeCellId( x + pawn.move, y2 )
-                possible[cellId2] = {result:ATTACK, type:ENPASSANT}
-            }
+        // The last move was a pawn that moved twice?
+        if ( summary.type == PAWN_MOVED_TWICE) {
+            // The current pawn is on a ROW from which an enpassant is possible? ( ROW )
+            if ( pawn.enpassat_row == pawn.x )  {
+                // The current pawn is adjacent to an enpassantable pawn? ( COLUMN )
+                rowCol = getRowCol(summary.endCell)
+                let row = rowCol[0]
+                let col = rowCol[1]
+                if ( ( col + 1) == pawn.y) {
+                    // remember1: 'pawn.move' is pos1 or neg1 ( white or black )
+                    // remember2: pawn.y - 1 or + 1? need to reverse
+                    let cellId = composeCellId(pawn.x + pawn.move, pawn.y - 1)
+                    possible[cellId] = {result:ATTACK, type:ENPASSANT}
+                }  else if ( ( col - 1 ) == pawn.y) {
+                    let cellId = composeCellId(pawn.x + pawn.move, pawn.y + 1)
+                    possible[cellId] = {result:ATTACK, type:ENPASSANT}
+                }           
+            }          
         }
     }
 }
-
 const pawn_movement=(pawn)=> {
     let x1 = pawn.x + pawn.move
     let y = pawn.y
