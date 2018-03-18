@@ -16,3 +16,19 @@ function setMode() {
     }
     document.getElementById("mode").innerHTML = CURRENT_MODE
 }
+let influence_black = {}
+let influence_white = {}
+
+function show_all_influences() { 
+
+    for (let id in pieces ) { 
+        let p = pieces[id]
+        if ( ! p.isDead ) {
+
+        }
+
+    }
+
+}
+
+

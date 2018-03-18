@@ -17,6 +17,7 @@ let NORMAL = 'normal'
 const killPieceOn = (cellId) => { 
   let c = board[cellId]
   let p = pieces[c.pid]
+  p.isDead = true
   html = document.getElementById("dead").innerHTML
   board[cellId].pid = ""
   document.getElementById(cellId).innerHTML = ""

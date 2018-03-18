@@ -14,7 +14,7 @@ l('<link rel="stylesheet" type="text/css" href="style.css">')
 l('</head>')
 l('<body>')
 //l('<span id="turn"></span><button id="mode" onclick="setMode();">Mode</button>')
-l('<button id="turn"></button><button id="mode" onclick="setMode();">mode: play</button><button class="hide_show" id="remove_selected" onclick="remove_selected();">remove: selected</button>')
+l('<button id="turn"></button><button id="mode" onclick="setMode();">mode: play</button><button id="remove_selected" onclick="remove_selected();">remove: selected</button><button id="show_all_influences" onclick="show_all_influences();">show: influences</button>')
 
 l('<table border="1"><tr><td valign="top">')
 
