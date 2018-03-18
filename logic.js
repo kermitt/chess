@@ -70,8 +70,7 @@ const resetCellColor = (id) => {
 
 
 // This does not cover pawns or kings.
-const possibleMoves = () => {
-  let p = pieces[activePid]
+const possibleMoves = (p) => {
   p.moves.forEach((xy)=>{
     let x = p.x
     let y = p.y
@@ -130,11 +129,11 @@ function cell_click (human, cellId) {
     activePid = pid
     document.getElementById(cellId).style.backgroundColor = SELECTED
     if ( piece.id.startsWith("wp") || piece.id.startsWith("bp")) {
-      pawnMove(cellId, piece)
+      pawnMove( piece)
     } else if ( piece.id == "wk" || piece.id == "bk") {
-      kingMove(cellId, piece)
+      kingMove( piece)
     } else {
-      possibleMoves()
+      possibleMoves(piece)
     } 
   } else {
     // END A MOVE 

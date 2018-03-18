@@ -64,7 +64,8 @@ const pawn_movement=(pawn)=> {
     }
 }
 
-const pawnMove = (cellId, pawn) => {
+//const pawnMove = (cellId, pawn) => {
+const pawnMove = (pawn) => {
     pawn_movement(pawn)
     pawn_attack(pawn)
     pawn_enpassant(pawn)

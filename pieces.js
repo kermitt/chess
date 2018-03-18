@@ -1,7 +1,7 @@
 const WHITE = 'white'
 const BLACK = 'black'
 class Piece {
-    constructor(unicode, row, column, color, id, name, travel) {
+    constructor(unicode, row, column, color, id, name,travel) {
         this.unicode = unicode // diplay
         this.y = column
         this.x = row
@@ -15,6 +15,7 @@ class Piece {
         document.getElementById(this.boardId).innerHTML = this.html
         this.isPawn = false
         this.isKing = false
+        this.isDead = false
     }
     getTravel() {
         return this.travel
@@ -128,6 +129,7 @@ pieces['wr2'] = new Rook('\u2656', 7, 7, WHITE, 'wr2', 'white_rook_kingside')
 pieces['br1'] = new Rook('\u265C', 0, 0, BLACK, 'br1', 'black_rook_queenside')
 pieces['br2'] = new Rook('\u265C', 0, 7, BLACK, 'br2', 'black_rook_kingside')
 //
+/*
 pieces['wb1'] = new Bishop('\u2657', 7, 2, WHITE, 'wb1', 'white_bishop_queenside')
 pieces['wb2'] = new Bishop('\u2657', 7, 5, WHITE, 'wb2', 'white_bishop_kingside')
 pieces['bb1'] = new Bishop('\u265D', 0, 2, BLACK, 'bb1', 'black_bishop_queenside')
@@ -137,6 +139,7 @@ pieces['wk1'] = new Knight('\u2658', 7, 1, WHITE, 'wk1', 'white_knight_queenside
 pieces['wk2'] = new Knight('\u2658', 7, 6, WHITE, 'wk2', 'white_knight_kingside')
 pieces['bk1'] = new Knight('\u265E', 0, 1, BLACK, 'bk1', 'black_knight_queenside')
 pieces['bk2'] = new Knight('\u265E', 0, 6, BLACK, 'bk2', 'black_knight_kingside')
+*/
 //
 pieces['wp1'] = new PawnWhite('\u2659', 6, 0, WHITE, 'wp1', 'white_pawn_1')
 pieces['wp2'] = new PawnWhite('\u2659', 6, 1, WHITE, 'wp2', 'white_pawn_2')

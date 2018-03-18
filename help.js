@@ -14,7 +14,7 @@ l('<link rel="stylesheet" type="text/css" href="style.css">')
 l('</head>')
 l('<body>')
 //l('<span id="turn"></span><button id="mode" onclick="setMode();">Mode</button>')
-l('<button id="turn"></button><button id="mode" onclick="setMode();">mode: play</button><button id="remove_selected" onclick="remove_selected();">remove: selected</button><button id="show_all_influences" onclick="show_all_influences();">show: influences</button>')
+l('<button id="turn"></button><button id="mode" onclick="setMode();">mode: play</button><button id="remove_selected" onclick="remove_selected();">remove: selected</button><button onclick="show_black_influences();">show: black</button><button onclick="show_white_influences();">show: white</button>')
 
 l('<table border="1"><tr><td valign="top">')
 
@@ -30,8 +30,8 @@ for (let col = 0;col < 8; col++) {
     let human = letters[col] + number
     let css = cell_color_flipflop % 2 == 0 ? BLACK_CELL : WHITE_CELL
     let rc = 'r' + row + 'c' + col
-//   l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'>" + rc + "</div></td>")
-    l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'></div></td>")
+   l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'>" + rc + "</div></td>")
+//    l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'></div></td>")
     cell_color_flipflop++
     board[rc] = {human:human, pid: '', influenced: {}, css: css, rc:rc}
   }
