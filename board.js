@@ -15,76 +15,36 @@ function setMode() {
     document.getElementById("mode").innerHTML = CURRENT_MODE
 }
 
+const len=(map)=> {
+    let i = 0
+    for ( let k in map) { 
+        i++
+    }
+    return i
+}
+
 function show_white_influences() {
     resetAllCells()
-    const influences = getAllInfluences()
-    const influence = influences['white']
-    for ( let cellId in influence ) {
-        if ( influence[cellId]['INFLUENCE'] > 0 ) {
-            document.getElementById(cellId).style.backgroundColor = INFLUENCE            
-        } else if ( influence[cellId]['SUPPORT'] > 0 ) {
-        //    document.getElementById(cellId).style.backgroundColor = TOUCH
-        } else if ( influence[cellId]['ATTACK'] > 0 ) {
-            document.getElementById(cellId).style.backgroundColor = TOUCH
+    for ( let cellId in board ) {
+        let cell = board[cellId].cell
+        if ( len(cell.records) > 0 ) {
+            console.log( cellId + "   " +  JSON.stringify(cell.records,null, 6))
+
+            let r2 = cell.records.result
+            let iro = "#000000"
+            if ( r2 == "INFLUENCE") {
+                iro = "#0000ff"
+            } else if ( r2 == "SUPPORT") {
+                iro = "#0000ff"
+            }
+
+            document.getElementById(cellId).style.backgroundColor = iro
+
+
+
         }
-    } 
+    }
 }
 
 function show_black_influences() {
-    resetAllCells()
-    const influences = getAllInfluences()
-    const influence = influences['black']
-    for ( let cellId in influence ) {
-        if ( influence[cellId]['INFLUENCE'] > 0 ) {
-            document.getElementById(cellId).style.backgroundColor = INFLUENCE            
-        } else if ( influence[cellId]['SUPPORT'] > 0 ) {
-        //    document.getElementById(cellId).style.backgroundColor = TOUCH
-        } else if ( influence[cellId]['ATTACK'] > 0 ) {
-            document.getElementById(cellId).style.backgroundColor = TOUCH
-        }
-    }
 }
-
-const getAllInfluences = () => { 
-    let influence_black = {}
-    let influence_white = {}
-    
-    for (let id in pieces ) { 
-        let piece = pieces[id]
-        if ( ! piece.isDead ) {
-            if ( piece.color == WHITE) {
-                getResults(piece, influence_white)
-            } else { 
-                getResults(piece, influence_black)
-            }
-        }
-    }
-    resetAllCells()
-    return {'black':influence_black, 'white':influence_white}
-}
-const getResults = (piece, influence) => {
-    possible = {}
-    if ( piece.id.startsWith("wp") || piece.id.startsWith("bp")) {
-        pawnMove( piece)
-    } else if ( piece.id == "wk" || piece.id == "bk") {
-        kingMove( piece)
-    } else {
-        possibleMoves(piece)
-    } 
-    for ( let cellId in possible ) {
-        if ( ! influence.hasOwnProperty(cellId)) { 
-            influence[cellId] = {'ATTACK':0,'INFLUENCE':0,'SUPPORT':0}
-        }
-        if ( possible[cellId].result == SUPPORT ) {
-        //    influence[cellId]['SUPPORT']++
-        } else if ( possible[cellId].result == ATTACK ) {
-            influence[cellId]['ATTACK']++
-        } else if ( possible[cellId].result == INFLUENCE ) {
-            if ( ! piece.isPawn ) {
-                influence[cellId]['INFLUENCE']++      
-            } 
-        }
-    }
-}
-
-

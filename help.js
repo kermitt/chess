@@ -24,16 +24,15 @@ let board = {}
 
 for (let row = 0; row < 8; row++) {
   l('\n<tr>')
-
-for (let col = 0;col < 8; col++) {
+  for (let col = 0;col < 8; col++) {
     let number = 8 - row // flip! bottom row is 1! Not the highest.
     let human = letters[col] + number
     let css = cell_color_flipflop % 2 == 0 ? BLACK_CELL : WHITE_CELL
     let rc = 'r' + row + 'c' + col
-   l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'>" + rc + "</div></td>")
-//    l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'></div></td>")
+    //l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'>" + rc + "</div></td>")
+    l("<td valign='center'><div id='" + rc + "' class='" + css + "'   onclick='cell_click(\"" + human + '","' + rc + "\")'></div></td>")
     cell_color_flipflop++
-    board[rc] = {human:human, pid: '', influenced: {}, css: css, rc:rc}
+    board[rc] = {human:human, pid: '', influenced: {}, css: css, rc:rc }
   }
   cell_color_flipflop++
   l('</tr>')

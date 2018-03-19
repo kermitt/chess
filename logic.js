@@ -1,4 +1,4 @@
-        //grilled cheese cactuses mushroom lightbulbs spo0nge 
+//grilled cheese cactuses mushroom lightbulbs spo0nge 
 const BLACK_CELL = 'cell_black'
 const WHITE_CELL = 'cell_white'
 const SUPPORT = "#0000ff"
@@ -100,6 +100,7 @@ const possibleMoves = (p) => {
       }
       for ( let cellId in possible ) { 
         document.getElementById(cellId).style.backgroundColor = possible[cellId].result
+
       }
     }
   })
@@ -136,6 +137,8 @@ function cell_click (human, cellId) {
       possibleMoves(piece)
     } 
   } else {
+    
+
     // END A MOVE 
     if ( possible.hasOwnProperty(cellId)) {
       if ( possible[cellId].result == INFLUENCE || possible[cellId].result == ATTACK) {
@@ -153,7 +156,7 @@ function cell_click (human, cellId) {
         let a = pieces[activePid]
         a.moveCount++
         addToHistory(activePid, a.boardId, cellId, possible[cellId].result, possible[cellId].type)
-
+        donatePossibleToInfluence(activePid)
         document.getElementById(a.boardId).innerHTML = ""
         board[a.boardId].pid = "" // remove record of the piece from the old cell
         a.boardId = cellId
@@ -162,6 +165,11 @@ function cell_click (human, cellId) {
         let xy = getRowCol(cellId)
         a.x = xy[0]       
         a.y = xy[1]
+
+        if ( possible[cellId].type == CASTLE ) {
+          // Deal w/ the rook
+          doCastling(cellId)
+        }
 
         possible = {}
         resetAllCells()
@@ -203,7 +211,59 @@ const addToHistory = (activePid, boardId, cellId, result, type) => {
   summary.result = result // attack or support or influence?
   summary.type = type // normal or enpassant or castle?
   history.push(summary)
+  let color = pieces[activePid].color
+  console.log(" ath " + activePid + " result " + result)
+
   let i = history.length - 1
   html = "<button class='hist' onclick='summarySelect(" + i + ");'>" + summary.pieceId + " | " + summary.type + "</button>"  
   document.getElementById("m" + i ).innerHTML = html 
 }
+
+
+function donatePossibleToInfluence(pid) {
+  //    possible[cellId] = {result:ATTACK, type:NORMAL}
+
+
+//  const SUPPORT = "#0000ff"
+//  const ATTACK = "#ff0000"
+//  const INFLUENCE = "#ffff00"
+//  const SELECTED = "#00ffff"
+
+  let c = pieces[pid].color 
+  for ( let cellId in possible ) {
+    let result = possible[cellId].result
+    let r2 = undefined
+    if ( result == INFLUENCE) {
+      r2 = "INFLUENCE"
+    } else if ( result == ATTACK ) {
+      r2 = "ATTACK"
+    } else if ( result == SUPPORT ) {
+      r2 = "SUPPORT"
+    } 
+    if ( pieces[pid].isPawn && r2 == "INFLUENCE") {
+      // skip it
+    } else {
+      board[cellId].cell.addInfluence(c,pid,r2)
+    }
+  }
+}
+
+
+class CellInfluences {
+  constructor() {
+      this.records = {}
+  }
+  addInfluence(color, pid, result) {
+      this.records[pid] = {color:color, pid:pid, result:result}
+  }
+  removeInfluence(pid) {
+      delete this.records[pid]
+  }
+}
+
+function init() {
+  for( let cellId in board ) {
+      board[cellId].cell = new CellInfluences()
+  }
+}
+init()
